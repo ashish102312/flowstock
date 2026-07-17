@@ -1,0 +1,55 @@
+# Maven
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Maven wrapper
+.mvn/wrapper/maven-wrapper.jar
+
+# IDE files
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V7
+.Trashes
+
+# Environment / secrets — NEVER commit
+.env
+.env.local
+.env.production
+*.env
+
+# Logs
+logs/
+*.log
+
+# Spring Boot
+spring-boot-maven-plugin*
+
+# Node / Frontend
+node_modules/
+dist/
+build/
+.cache/
+*.tsbuildinfo
+
+# Test coverage
+coverage/
+
+# Docker volumes
+postgres_data/
+redis_data/
