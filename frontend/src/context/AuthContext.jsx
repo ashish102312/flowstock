@@ -1,32 +1,13 @@
-import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback } from 'react';
 import { authApi } from '../services/api';
 
-interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  emailVerified: boolean;
-  roles: string[];
-  profilePictureUrl?: string;
-}
+const AuthContext = createContext(undefined);
 
-interface AuthContextType {
-  user: User | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
-  setUserFromToken: (token: string, user: User) => void;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const login = useCallback(async (email: string, password: string) => {
+  const login = useCallback(async (email, password) => {
     setIsLoading(true);
     try {
       const { data } = await authApi.login({ email, password });
@@ -51,7 +32,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const setUserFromToken = useCallback((token: string, userData: User) => {
+  const setUserFromToken = useCallback((token, userData) => {
     sessionStorage.setItem('access_token', token);
     setUser(userData);
   }, []);

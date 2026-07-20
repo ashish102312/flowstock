@@ -11,7 +11,7 @@ import { authApi } from './services/api';
 import toast from 'react-hot-toast';
 
 // ── Protected Route wrapper ──────────────────────────────────────────────────
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
+function ProtectedRoute({ children }) {
   const { isAuthenticated, user, setUserFromToken } = useAuth();
   const token = sessionStorage.getItem('access_token');
 

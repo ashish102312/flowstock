@@ -18,10 +18,10 @@ api.interceptors.request.use((config) => {
 
 // ── Response interceptor: handle 401 → refresh ────────────────────────────────
 let isRefreshing = false;
-let failedQueue: Array<{ resolve: (v: string) => void; reject: (e: unknown) => void }> = [];
+let failedQueue = [];
 
-const processQueue = (error: unknown, token: string | null = null) => {
-  failedQueue.forEach((p) => (error ? p.reject(error) : p.resolve(token!)));
+const processQueue = (error, token = null) => {
+  failedQueue.forEach((p) => (error ? p.reject(error) : p.resolve(token)));
   failedQueue = [];
 };
 
@@ -62,23 +62,23 @@ api.interceptors.response.use(
 
 // ── Auth API calls ─────────────────────────────────────────────────────────────
 export const authApi = {
-  register: (data: { firstName: string; lastName: string; email: string; password: string }) =>
+  register: (data) =>
     api.post('/auth/register', data),
 
-  login: (data: { email: string; password: string }) =>
+  login: (data) =>
     api.post('/auth/login', data),
 
   logout: () => api.post('/auth/logout'),
 
   refresh: () => api.post('/auth/refresh'),
 
-  forgotPassword: (email: string) =>
+  forgotPassword: (email) =>
     api.post('/auth/forgot-password', { email }),
 
-  resetPassword: (token: string, newPassword: string) =>
+  resetPassword: (token, newPassword) =>
     api.post('/auth/reset-password', { token, newPassword }),
 
-  verifyEmail: (token: string) =>
+  verifyEmail: (token) =>
     api.get(`/auth/verify-email?token=${token}`),
 
   getProfile: () => api.get('/users/me'),
