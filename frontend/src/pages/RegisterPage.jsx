@@ -24,9 +24,7 @@ const schema = z.object({
   path: ['confirmPassword'],
 });
 
-type FormData = z.infer<typeof schema>;
-
-const PasswordRule = ({ met, label }: { met: boolean; label: string }) => (
+const PasswordRule = ({ met, label }) => (
   <div className={`flex items-center gap-1.5 text-xs transition-colors ${met ? 'text-green-400' : 'text-white/30'}`}>
     <Check className={`w-3 h-3 ${met ? 'opacity-100' : 'opacity-30'}`} />
     {label}
@@ -38,7 +36,7 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, watch, formState: { errors } } = useForm({
     resolver: zodResolver(schema),
     mode: 'onChange',
   });
@@ -52,7 +50,7 @@ export default function RegisterPage() {
     special: /[@$!%*?&]/.test(pw),
   };
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data) => {
     setIsLoading(true);
     try {
       await authApi.register({
@@ -63,7 +61,7 @@ export default function RegisterPage() {
       });
       toast.success('Account created! Check your email to verify.');
       navigate('/login');
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err?.response?.data?.message || 'Registration failed.');
     } finally {
       setIsLoading(false);

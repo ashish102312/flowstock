@@ -3,10 +3,8 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { CheckCircle2, XCircle, Loader2 } from 'lucide-react';
 import { authApi } from '../services/api';
 
-type Status = 'loading' | 'success' | 'error';
-
 export default function VerifyEmailPage() {
-  const [status, setStatus] = useState<Status>('loading');
+  const [status, setStatus] = useState('loading');
   const [message, setMessage] = useState('');
   const [searchParams] = useSearchParams();
 

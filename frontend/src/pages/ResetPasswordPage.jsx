@@ -21,9 +21,7 @@ const schema = z.object({
   path: ['confirmPassword'],
 });
 
-type FormData = z.infer<typeof schema>;
-
-const Rule = ({ met, label }: { met: boolean; label: string }) => (
+const Rule = ({ met, label }) => (
   <div className={`flex items-center gap-1.5 text-xs transition-colors ${met ? 'text-green-400' : 'text-white/30'}`}>
     <Check className="w-3 h-3" />
     {label}
@@ -38,7 +36,7 @@ export default function ResetPasswordPage() {
   const navigate = useNavigate();
   const token = searchParams.get('token') || '';
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, watch, formState: { errors } } = useForm({
     resolver: zodResolver(schema),
     mode: 'onChange',
   });
@@ -50,14 +48,14 @@ export default function ResetPasswordPage() {
     special: /[@$!%*?&]/.test(pw),
   };
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data) => {
     if (!token) { toast.error('Invalid reset link.'); return; }
     setIsLoading(true);
     try {
       await authApi.resetPassword(token, data.newPassword);
       setDone(true);
       setTimeout(() => navigate('/login'), 3000);
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err?.response?.data?.message || 'Reset failed. The link may have expired.');
     } finally {
       setIsLoading(false);

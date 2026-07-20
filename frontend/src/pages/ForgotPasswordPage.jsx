@@ -9,17 +9,15 @@ import { authApi } from '../services/api';
 const schema = z.object({
   email: z.string().email('Please enter a valid email address'),
 });
-type FormData = z.infer<typeof schema>;
-
 export default function ForgotPasswordPage() {
   const [sent, setSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { register, handleSubmit, getValues, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, getValues, formState: { errors } } = useForm({
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data) => {
     setIsLoading(true);
     try {
       await authApi.forgotPassword(data.email);

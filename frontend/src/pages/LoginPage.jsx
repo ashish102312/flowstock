@@ -11,23 +11,21 @@ const schema = z.object({
   email: z.string().email('Please enter a valid email'),
   password: z.string().min(1, 'Password is required'),
 });
-type FormData = z.infer<typeof schema>;
-
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const { login, isLoading } = useAuth();
   const navigate = useNavigate();
 
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data) => {
     try {
       await login(data.email, data.password);
       toast.success('Welcome back!');
       navigate('/dashboard');
-    } catch (err: any) {
+    } catch (err) {
       const msg = err?.response?.data?.message || 'Login failed. Please try again.';
       toast.error(msg);
     }
