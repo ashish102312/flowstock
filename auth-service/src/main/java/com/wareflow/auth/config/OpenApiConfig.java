@@ -20,7 +20,7 @@ public class OpenApiConfig {
     public OpenAPI openAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("WareFlow Auth Service API")
+                        .title("FlowStock Auth Service API")
                         .description("Production-ready Authentication & Authorization microservice. " +
                                 "Provides JWT-based auth, OAuth2 login, RBAC, and session management.")
                         .version("v1.0.0")

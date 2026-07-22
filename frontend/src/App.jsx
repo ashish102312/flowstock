@@ -11,6 +11,10 @@ import VerifyEmailPage from './pages/VerifyEmailPage';
 import { authApi } from './services/api';
 import toast from 'react-hot-toast';
 
+import AdminPanel from './pages/dashboards/AdminPanel';
+import ManagerPanel from './pages/dashboards/ManagerPanel';
+import UserPanel from './pages/dashboards/UserPanel';
+
 // ── Protected Route wrapper ──────────────────────────────────────────────────
 function ProtectedRoute({ children }) {
   const { isAuthenticated, user, setUserFromToken } = useAuth();
@@ -94,7 +98,7 @@ function Dashboard() {
                 d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
             </svg>
           </div>
-          <span className="text-white font-bold text-lg">WareFlow</span>
+          <span className="text-white font-bold text-lg">FlowStock</span>
         </div>
         <div className="flex items-center gap-4">
           <span className="text-white/60 text-sm">{user?.email}</span>
@@ -105,11 +109,21 @@ function Dashboard() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 p-8 max-w-4xl mx-auto w-full flex flex-col justify-center animate-slide-up">
-        <div className="auth-card p-10 space-y-6">
+      <main className="flex-1 p-8 max-w-4xl mx-auto w-full flex flex-col justify-start animate-slide-up mt-8">
+        
+        {/* Dynamic Role Dashboard */}
+        {user?.roles?.includes('ROLE_ADMIN') || user?.roles?.includes('ROLE_SUPER_ADMIN') ? (
+          <AdminPanel user={user} />
+        ) : user?.roles?.includes('ROLE_MANAGER') ? (
+          <ManagerPanel user={user} />
+        ) : (
+          <UserPanel user={user} />
+        )}
+
+        <div className="auth-card p-10 space-y-6 mt-8">
           <div>
             <h1 className="text-3xl font-bold">Welcome back, {user?.firstName || 'User'}!</h1>
-            <p className="text-white/40 mt-1">You have successfully authenticated to the WareFlow platform.</p>
+            <p className="text-white/40 mt-1">You have successfully authenticated to the FlowStock platform.</p>
           </div>
 
           <div className="border-t border-white/10 pt-6 space-y-4 text-sm text-white/70">

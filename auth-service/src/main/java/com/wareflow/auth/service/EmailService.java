@@ -19,11 +19,11 @@ public class EmailService {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(toEmail);
-            message.setSubject("WareFlow — Verify Your Email Address");
+            message.setSubject("FlowStock — Verify Your Email Address");
             message.setText("""
                     Hello %s,
 
-                    Welcome to WareFlow! Please verify your email address by clicking the link below:
+                    Welcome to FlowStock! Please verify your email address by clicking the link below:
 
                     %s
 
@@ -31,7 +31,7 @@ public class EmailService {
 
                     If you did not create an account, please ignore this email.
 
-                    — The WareFlow Team
+                    — The FlowStock Team
                     """.formatted(fullName, verificationLink));
             mailSender.send(message);
             log.info("Verification email sent to {}", toEmail);
@@ -45,11 +45,11 @@ public class EmailService {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(toEmail);
-            message.setSubject("WareFlow — Password Reset Request");
+            message.setSubject("FlowStock — Password Reset Request");
             message.setText("""
                     Hello %s,
 
-                    We received a request to reset the password for your WareFlow account.
+                    We received a request to reset the password for your FlowStock account.
 
                     Click the link below to reset your password (expires in 15 minutes):
 
@@ -57,7 +57,7 @@ public class EmailService {
 
                     If you did not request this, please ignore this email. Your account is safe.
 
-                    — The WareFlow Team
+                    — The FlowStock Team
                     """.formatted(fullName, resetLink));
             mailSender.send(message);
             log.info("Password reset email sent to {}", toEmail);
@@ -71,15 +71,15 @@ public class EmailService {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(toEmail);
-            message.setSubject("WareFlow — Your Password Was Changed");
+            message.setSubject("FlowStock — Your Password Was Changed");
             message.setText("""
                     Hello %s,
 
-                    Your WareFlow account password was successfully changed.
+                    Your FlowStock account password was successfully changed.
 
                     If you did not make this change, please contact support immediately.
 
-                    — The WareFlow Team
+                    — The FlowStock Team
                     """.formatted(fullName));
             mailSender.send(message);
         } catch (Exception e) {

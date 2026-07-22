@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final com.wareflow.auth.repository.LoginSessionRepository loginSessionRepository;
+    private final com.wareflow.auth.repository.AuditLogRepository auditLogRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -58,5 +60,45 @@ public class UserService implements UserDetailsService {
                 .createdAt(user.getCreatedAt())
                 .lastLoginAt(user.getLastLoginAt())
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public java.util.List<UserResponse> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(this::buildResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public java.util.List<com.wareflow.auth.dto.response.SessionResponse> getUserSessions(UUID userId) {
+        return loginSessionRepository.findAllByUserIdOrderByCreatedAtDesc(userId).stream()
+                .map(session -> com.wareflow.auth.dto.response.SessionResponse.builder()
+                        .id(session.getId())
+                        .ipAddress(session.getIpAddress())
+                        .deviceName(session.getDeviceName())
+                        .browser(session.getBrowser())
+                        .os(session.getOs())
+                        .status(session.getStatus().name())
+                        .lastActiveAt(session.getLastActiveAt())
+                        .createdAt(session.getCreatedAt())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public java.util.List<com.wareflow.auth.dto.response.AuditLogResponse> getUserAuditLogs(UUID userId, org.springframework.data.domain.Pageable pageable) {
+        return auditLogRepository.findAllByUserIdOrderByCreatedAtDesc(userId, pageable).stream()
+                .map(log -> com.wareflow.auth.dto.response.AuditLogResponse.builder()
+                        .id(log.getId())
+                        .action(log.getAction().name())
+                        .entityId(log.getUserId() != null ? log.getUserId().toString() : null)
+                        .actorEmail(log.getEmail())
+                        .ipAddress(log.getIpAddress())
+                        .userAgent(log.getUserAgent())
+                        .details(log.getDetails())
+                        .status(log.getResult().name())
+                        .createdAt(log.getCreatedAt())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

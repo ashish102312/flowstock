@@ -64,8 +64,18 @@ public class AuthService {
             throw AuthException.emailAlreadyExists(request.email());
         }
 
-        Role userRole = roleRepository.findByName("ROLE_USER")
-                .orElseThrow(() -> new IllegalStateException("Default role ROLE_USER not found. Ensure DB migrations ran."));
+        String requestedRoleName = "ROLE_USER";
+        if (request.role() != null) {
+            if (request.role().equalsIgnoreCase("ADMIN")) {
+                requestedRoleName = "ROLE_ADMIN";
+            } else if (request.role().equalsIgnoreCase("MANAGER") || request.role().equalsIgnoreCase("OWNER")) {
+                requestedRoleName = "ROLE_MANAGER";
+            }
+        }
+
+        final String finalRoleName = requestedRoleName;
+        Role userRole = roleRepository.findByName(finalRoleName)
+                .orElseThrow(() -> new IllegalStateException("Role " + finalRoleName + " not found. Ensure DB migrations ran."));
 
         User user = User.builder()
                 .firstName(request.firstName())

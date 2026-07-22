@@ -31,7 +31,7 @@ export default function VerifyEmailPage() {
                 d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
             </svg>
           </div>
-          <span className="text-white font-bold text-lg">WareFlow</span>
+          <span className="text-white font-bold text-lg">FlowStock</span>
         </div>
 
         <div className="auth-card p-10">
@@ -50,7 +50,7 @@ export default function VerifyEmailPage() {
               <h1 className="text-2xl font-bold text-white">Email Verified</h1>
               <p className="text-white/40 text-sm">{message}</p>
               <Link to="/login" className="btn-primary inline-block text-center mt-2">
-                Sign in to WareFlow
+                Sign in to FlowStock
               </Link>
             </div>
           )}

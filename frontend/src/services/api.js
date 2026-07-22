@@ -83,3 +83,10 @@ export const authApi = {
 
   getProfile: () => api.get('/users/me'),
 };
+
+// ── Users API calls ────────────────────────────────────────────────────────────
+export const usersApi = {
+  getAllUsers: () => api.get('/users'),
+  getMySessions: () => api.get('/users/sessions'),
+  getMyAuditLogs: (page = 0, size = 10) => api.get(`/users/audit-logs?page=${page}&size=${size}`),
+};

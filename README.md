@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🏭 WareFlow — Enterprise Supply Chain & Warehouse Management Platform
+# 🏭 FlowStock — Enterprise Supply Chain & Warehouse Management Platform
 
 [![Java](https://img.shields.io/badge/Java-21-ED8B00?style=flat-square&logo=openjdk&logoColor=white)](https://openjdk.org/projects/jdk/21/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-6DB33F?style=flat-square&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
@@ -12,7 +12,7 @@
 [![React](https://img.shields.io/badge/React-18.x-61DAFB?style=flat-square&logo=react&logoColor=white)](https://react.dev/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
-> **WareFlow** is a cloud-native, enterprise-grade Supply Chain and Warehouse Management Platform designed to solve real-world logistics and inventory challenges faced by modern e-commerce giants like **Amazon**, **Flipkart**, **Blinkit**, and **Zepto**.
+> **FlowStock** is a cloud-native, enterprise-grade Supply Chain and Warehouse Management Platform designed to solve real-world logistics and inventory challenges faced by modern e-commerce giants like **Amazon**, **Flipkart**, **Blinkit**, and **Zepto**.
 
 </div>
 
@@ -20,11 +20,11 @@
 
 ## 📌 Overview
 
-WareFlow is **not** your typical inventory tracking tool. It is a production-ready, event-driven platform that mirrors the operational complexity of real-world large-scale e-commerce fulfillment networks.
+FlowStock is **not** your typical inventory tracking tool. It is a production-ready, event-driven platform that mirrors the operational complexity of real-world large-scale e-commerce fulfillment networks.
 
-Unlike traditional inventory management systems that simply store product information, **WareFlow focuses on solving operational problems**:
+Unlike traditional inventory management systems that simply store product information, **FlowStock focuses on solving operational problems**:
 
-| Problem | WareFlow's Solution |
+| Problem | FlowStock's Solution |
 |---|---|
 | 🚫 Inventory Overselling | Distributed locking + real-time reservation system |
 | 🏢 Poor Warehouse Utilization | Smart bin/zone allocation engine |
@@ -36,7 +36,7 @@ Unlike traditional inventory management systems that simply store product inform
 
 ## 🏗️ Architecture
 
-WareFlow follows a **microservices architecture** orchestrated via Spring Cloud, with each service independently deployable and scalable.
+FlowStock follows a **microservices architecture** orchestrated via Spring Cloud, with each service independently deployable and scalable.
 
 ```
                         ┌──────────────────────────────┐

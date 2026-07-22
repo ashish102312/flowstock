@@ -1,4 +1,60 @@
-# Maven
+# ==============================================================================
+# Universal .gitignore
+# ==============================================================================
+
+# OS & Environment
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V7
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDEs and Editors
+.idea/
+.vscode/
+!.vscode/extensions.json
+*.swp
+*.swo
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.iml
+*.iws
+*.ipr
+*~
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Secrets and Environment Variables - NEVER COMMIT
+.env
+.env.*
+!.env.example
+*.local
+
+# Node.js / Frontend
+node_modules/
+dist/
+dist-ssr/
+build/
+.cache/
+*.tsbuildinfo
+coverage/
+.npm/
+.eslintcache
+.stylelintcache
+
+# Java / Maven / Spring Boot
 target/
 *.class
 *.jar
@@ -7,49 +63,21 @@ target/
 *.zip
 *.tar.gz
 *.rar
-
-# Maven wrapper
 .mvn/wrapper/maven-wrapper.jar
-
-# IDE files
-.idea/
-*.iml
-*.iws
-*.ipr
-.vscode/
-*.swp
-*.swo
-
-# macOS
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V7
-.Trashes
-
-# Environment / secrets — NEVER commit
-.env
-.env.local
-.env.production
-*.env
-
-# Logs
-logs/
-*.log
-
-# Spring Boot
 spring-boot-maven-plugin*
 
-# Node / Frontend
-node_modules/
-dist/
-build/
-.cache/
-*.tsbuildinfo
+# Python (in case it is used)
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
 
-# Test coverage
-coverage/
-
-# Docker volumes
+# Docker and Infrastructure
+docker-compose.yml
+docker-compose.override.yml
+.docker/
 postgres_data/
 redis_data/

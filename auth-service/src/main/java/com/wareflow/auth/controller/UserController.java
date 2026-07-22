@@ -29,4 +29,26 @@ public class UserController {
         UserResponse profile = userService.getProfile(principal);
         return ResponseEntity.ok(ApiResponse.success(profile, "Profile retrieved"));
     }
+
+    @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN_USER_READ') or hasRole('ROLE_ADMIN')")
+    @Operation(summary = "Get all users (Admin only)")
+    public ResponseEntity<ApiResponse<java.util.List<UserResponse>>> getAllUsers() {
+        return ResponseEntity.ok(ApiResponse.success(userService.getAllUsers(), "Users retrieved"));
+    }
+
+    @GetMapping("/sessions")
+    @Operation(summary = "Get current user's login sessions")
+    public ResponseEntity<ApiResponse<java.util.List<com.wareflow.auth.dto.response.SessionResponse>>> getMySessions(
+            @AuthenticationPrincipal UserPrincipal principal) {
+        return ResponseEntity.ok(ApiResponse.success(userService.getUserSessions(principal.getUserId()), "Sessions retrieved"));
+    }
+
+    @GetMapping("/audit-logs")
+    @Operation(summary = "Get current user's audit logs")
+    public ResponseEntity<ApiResponse<java.util.List<com.wareflow.auth.dto.response.AuditLogResponse>>> getMyAuditLogs(
+            @AuthenticationPrincipal UserPrincipal principal,
+            org.springframework.data.domain.Pageable pageable) {
+        return ResponseEntity.ok(ApiResponse.success(userService.getUserAuditLogs(principal.getUserId(), pageable), "Audit logs retrieved"));
+    }
 }

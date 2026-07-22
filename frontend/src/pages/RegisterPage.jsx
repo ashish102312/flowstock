@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Eye, EyeOff, Mail, Lock, User, AlertCircle, Loader2, Check } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, AlertCircle, Loader2, Check, Building2, Shield } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { authApi } from '../services/api';
 
@@ -19,6 +19,7 @@ const schema = z.object({
     .regex(/\d/, 'Must include a number')
     .regex(/[@$!%*?&]/, 'Must include a special character (@$!%*?&)'),
   confirmPassword: z.string(),
+  role: z.enum(['USER', 'MANAGER', 'ADMIN']),
 }).refine((d) => d.password === d.confirmPassword, {
   message: 'Passwords do not match',
   path: ['confirmPassword'],
@@ -36,10 +37,15 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm({
+  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({
     resolver: zodResolver(schema),
     mode: 'onChange',
+    defaultValues: {
+      role: 'USER'
+    }
   });
+
+  const selectedRole = watch('role');
 
   const pw = watch('password', '');
   const rules = {
@@ -58,6 +64,7 @@ export default function RegisterPage() {
         lastName: data.lastName,
         email: data.email,
         password: data.password,
+        role: data.role,
       });
       toast.success('Account created! Check your email to verify.');
       navigate('/login');
@@ -80,13 +87,13 @@ export default function RegisterPage() {
                 d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
             </svg>
           </div>
-          <span className="text-white font-bold text-lg">WareFlow</span>
+          <span className="text-white font-bold text-lg">FlowStock</span>
         </div>
 
         <div className="auth-card p-8 md:p-10">
           <div className="mb-8">
             <h1 className="text-2xl font-bold text-white">Create your account</h1>
-            <p className="text-white/40 text-sm mt-1.5">Get started with WareFlow in minutes.</p>
+            <p className="text-white/40 text-sm mt-1.5">Get started with FlowStock in minutes.</p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
@@ -109,6 +116,56 @@ export default function RegisterPage() {
                   className={`field-input ${errors.lastName ? 'field-input-error' : ''}`} />
                 {errors.lastName && <p className="field-error"><AlertCircle className="w-3 h-3" />{errors.lastName.message}</p>}
               </div>
+            </div>
+
+            {/* Role Cards */}
+            <div>
+              <label className="field-label mb-3 block">Account Type</label>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {/* Standard User */}
+                <div 
+                  onClick={() => setValue('role', 'USER')}
+                  className={`border rounded-xl p-4 cursor-pointer transition-all ${
+                    selectedRole === 'USER' 
+                    ? 'bg-brand-500/20 border-brand-500 ring-1 ring-brand-500' 
+                    : 'bg-white/5 border-white/10 hover:bg-white/10'
+                  }`}
+                >
+                  <User className={`w-6 h-6 mb-2 ${selectedRole === 'USER' ? 'text-brand-400' : 'text-white/40'}`} />
+                  <h3 className="font-semibold text-sm text-white">Standard User</h3>
+                  <p className="text-xs text-white/50 mt-1">Basic access profile</p>
+                </div>
+
+                {/* Warehouse Owner */}
+                <div 
+                  onClick={() => setValue('role', 'MANAGER')}
+                  className={`border rounded-xl p-4 cursor-pointer transition-all ${
+                    selectedRole === 'MANAGER' 
+                    ? 'bg-brand-500/20 border-brand-500 ring-1 ring-brand-500' 
+                    : 'bg-white/5 border-white/10 hover:bg-white/10'
+                  }`}
+                >
+                  <Building2 className={`w-6 h-6 mb-2 ${selectedRole === 'MANAGER' ? 'text-brand-400' : 'text-white/40'}`} />
+                  <h3 className="font-semibold text-sm text-white">Warehouse</h3>
+                  <p className="text-xs text-white/50 mt-1">Manage inventory</p>
+                </div>
+
+                {/* Administrator */}
+                <div 
+                  onClick={() => setValue('role', 'ADMIN')}
+                  className={`border rounded-xl p-4 cursor-pointer transition-all ${
+                    selectedRole === 'ADMIN' 
+                    ? 'bg-red-500/20 border-red-500 ring-1 ring-red-500' 
+                    : 'bg-white/5 border-white/10 hover:bg-white/10'
+                  }`}
+                >
+                  <Shield className={`w-6 h-6 mb-2 ${selectedRole === 'ADMIN' ? 'text-red-400' : 'text-white/40'}`} />
+                  <h3 className="font-semibold text-sm text-white">Administrator</h3>
+                  <p className="text-xs text-white/50 mt-1">Full system access</p>
+                </div>
+              </div>
+              <input type="hidden" {...register('role')} />
+              {errors.role && <p className="field-error mt-2"><AlertCircle className="w-3 h-3" />{errors.role.message}</p>}
             </div>
 
             {/* Email */}
