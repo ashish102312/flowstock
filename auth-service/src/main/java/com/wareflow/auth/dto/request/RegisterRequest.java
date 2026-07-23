@@ -26,5 +26,8 @@ public record RegisterRequest(
         )
         String password,
 
-        String role
+        @Pattern(regexp = "^(USER|MANAGER|ADMIN)$", message = "Invalid account type")
+        String role,
+
+        String adminSecret
 ) {}

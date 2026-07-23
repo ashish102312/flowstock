@@ -20,6 +20,7 @@ const schema = z.object({
     .regex(/[@$!%*?&]/, 'Must include a special character (@$!%*?&)'),
   confirmPassword: z.string(),
   role: z.enum(['USER', 'MANAGER', 'ADMIN']),
+  adminSecret: z.string().optional(),
 }).refine((d) => d.password === d.confirmPassword, {
   message: 'Passwords do not match',
   path: ['confirmPassword'],
@@ -124,8 +125,11 @@ export default function RegisterPage() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {/* Standard User */}
                 <div 
-                  onClick={() => setValue('role', 'USER')}
-                  className={`border rounded-xl p-4 cursor-pointer transition-all ${
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => setValue('role', 'USER', { shouldValidate: true })}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setValue('role', 'USER', { shouldValidate: true }); } }}
+                  className={`border rounded-xl p-4 cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent ${
                     selectedRole === 'USER' 
                     ? 'bg-brand-500/20 border-brand-500 ring-1 ring-brand-500' 
                     : 'bg-white/5 border-white/10 hover:bg-white/10'
@@ -138,8 +142,11 @@ export default function RegisterPage() {
 
                 {/* Warehouse Owner */}
                 <div 
-                  onClick={() => setValue('role', 'MANAGER')}
-                  className={`border rounded-xl p-4 cursor-pointer transition-all ${
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => setValue('role', 'MANAGER', { shouldValidate: true })}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setValue('role', 'MANAGER', { shouldValidate: true }); } }}
+                  className={`border rounded-xl p-4 cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent ${
                     selectedRole === 'MANAGER' 
                     ? 'bg-brand-500/20 border-brand-500 ring-1 ring-brand-500' 
                     : 'bg-white/5 border-white/10 hover:bg-white/10'
@@ -152,8 +159,11 @@ export default function RegisterPage() {
 
                 {/* Administrator */}
                 <div 
-                  onClick={() => setValue('role', 'ADMIN')}
-                  className={`border rounded-xl p-4 cursor-pointer transition-all ${
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => setValue('role', 'ADMIN', { shouldValidate: true })}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setValue('role', 'ADMIN', { shouldValidate: true }); } }}
+                  className={`border rounded-xl p-4 cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent ${
                     selectedRole === 'ADMIN' 
                     ? 'bg-red-500/20 border-red-500 ring-1 ring-red-500' 
                     : 'bg-white/5 border-white/10 hover:bg-white/10'
@@ -167,6 +177,22 @@ export default function RegisterPage() {
               <input type="hidden" {...register('role')} />
               {errors.role && <p className="field-error mt-2"><AlertCircle className="w-3 h-3" />{errors.role.message}</p>}
             </div>
+
+            {/* Admin Secret Code (Conditionally Rendered) */}
+            {(selectedRole === 'ADMIN' || selectedRole === 'MANAGER') && (
+              <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+                <label htmlFor="adminSecret" className="field-label flex items-center justify-between">
+                  <span>Secret Registration Code</span>
+                  <span className="text-[10px] text-brand-400 uppercase tracking-wider font-bold bg-brand-500/10 px-2 py-0.5 rounded">Required for role</span>
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-400/50 pointer-events-none" />
+                  <input id="adminSecret" type="text" placeholder="Enter authorization code"
+                    {...register('adminSecret')}
+                    className="field-input pl-10 border-brand-500/30 focus:border-brand-500" />
+                </div>
+              </div>
+            )}
 
             {/* Email */}
             <div>

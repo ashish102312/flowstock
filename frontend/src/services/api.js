@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8081';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
 export const api = axios.create({
   baseURL: `${API_BASE}/api/v1`,
@@ -89,4 +89,10 @@ export const usersApi = {
   getAllUsers: () => api.get('/users'),
   getMySessions: () => api.get('/users/sessions'),
   getMyAuditLogs: (page = 0, size = 10) => api.get(`/users/audit-logs?page=${page}&size=${size}`),
+};
+
+// ── Products API calls ─────────────────────────────────────────────────────────
+export const productsApi = {
+  getAllProducts: () => api.get('/products'),
+  getProductById: (id) => api.get(`/products/${id}`),
 };
