@@ -1,0 +1,54 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: inventory-service
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:flowstock}
+    username: ${DB_USERNAME:ashishbhardwaj}
+    password: ${DB_PASSWORD:wareflow_dev}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        default_schema: inventory
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    schemas: inventory
+    locations: classpath:db/migration
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}/eureka/
+  instance:
+    prefer-ip-address: true
+
+# Inventory business rules
+inventory:
+  low-stock-threshold: 10
+  lock:
+    ttl-seconds: 30
+    retry-attempts: 5
+    retry-delay-ms: 200
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics

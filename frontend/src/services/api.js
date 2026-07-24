@@ -122,3 +122,15 @@ export const productsApi = {
   getProductById: (id) => api.get(`/products/${id}`),
   createProduct: (data) => api.post('/products', data),
 };
+
+// ── Inventory API calls ────────────────────────────────────────────────────────
+export const inventoryApi = {
+  getInventoryByProduct: (productId) => api.get(`/inventory/product/${productId}`),
+  getInventoryByWarehouse: (warehouseId) => api.get(`/inventory/warehouse/${warehouseId}`),
+  getItem: (productId, warehouseId) => api.get(`/inventory/item?productId=${productId}&warehouseId=${warehouseId}`),
+  getLowStock: () => api.get('/inventory/low-stock'),
+  getAuditLog: (productId) => api.get(`/inventory/audit/${productId}`),
+  initialize: (data) => api.post('/inventory/initialize', data),
+  adjustStock: (id, data) => api.post(`/inventory/${id}/adjust`, data),
+  reserveStock: (id, data) => api.post(`/inventory/${id}/reserve`, data),
+};

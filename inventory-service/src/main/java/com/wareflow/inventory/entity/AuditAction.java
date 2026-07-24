@@ -1,0 +1,14 @@
+package com.wareflow.inventory.entity;
+
+public enum AuditAction {
+    STOCK_ADDED,
+    STOCK_REMOVED,
+    STOCK_RESERVED,
+    RESERVATION_RELEASED,
+    RESERVATION_CONSUMED,
+    DAMAGED_RECORDED,
+    ADJUSTMENT,
+    TRANSFER_IN,
+    TRANSFER_OUT,
+    INCOMING_REGISTERED
+}
