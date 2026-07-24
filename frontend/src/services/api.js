@@ -91,8 +91,34 @@ export const usersApi = {
   getMyAuditLogs: (page = 0, size = 10) => api.get(`/users/audit-logs?page=${page}&size=${size}`),
 };
 
+// ── Warehouse API calls ────────────────────────────────────────────────────────
+export const warehouseApi = {
+  getAllWarehouses: () => api.get('/warehouses'),
+  getWarehouseById: (id) => api.get(`/warehouses/${id}`),
+  createWarehouse: (data) => api.post('/warehouses', data),
+  updateWarehouse: (id, data) => api.put(`/warehouses/${id}`, data),
+  deleteWarehouse: (id) => api.delete(`/warehouses/${id}`),
+  getAvailable: () => api.get('/warehouses/available'),
+};
+
+// ── Supplier API calls ─────────────────────────────────────────────────────────
+export const supplierApi = {
+  getAllSuppliers: () => api.get('/suppliers'),
+  getSupplierById: (id) => api.get(`/suppliers/${id}`),
+  createSupplier: (data) => api.post('/suppliers', data),
+  updateSupplier: (id, data) => api.put(`/suppliers/${id}`, data),
+  deleteSupplier: (id) => api.delete(`/suppliers/${id}`),
+
+  getAllPurchaseOrders: () => api.get('/suppliers/purchase-orders'),
+  getPurchaseOrderById: (id) => api.get(`/suppliers/purchase-orders/${id}`),
+  createPurchaseOrder: (data) => api.post('/suppliers/purchase-orders', data),
+  updateOrderStatus: (id, status) => api.patch(`/suppliers/purchase-orders/${id}/status?status=${status}`),
+  getOrdersBySupplier: (supplierId) => api.get(`/suppliers/${supplierId}/purchase-orders`),
+};
+
 // ── Products API calls ─────────────────────────────────────────────────────────
 export const productsApi = {
   getAllProducts: () => api.get('/products'),
   getProductById: (id) => api.get(`/products/${id}`),
+  createProduct: (data) => api.post('/products', data),
 };

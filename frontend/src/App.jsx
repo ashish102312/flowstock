@@ -8,6 +8,8 @@ import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import VerifyEmailPage from './pages/VerifyEmailPage';
+import WarehousePage from './pages/WarehousePage';
+import SupplierPage from './pages/SupplierPage';
 import { authApi } from './services/api';
 import toast from 'react-hot-toast';
 
@@ -171,6 +173,8 @@ export default function App() {
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/verify-email" element={<VerifyEmailPage />} />
           <Route path="/oauth2/callback" element={<OAuth2Callback />} />
+          <Route path="/warehouses" element={<WarehousePage />} />
+          <Route path="/suppliers" element={<SupplierPage />} />
           <Route path="/dashboard" element={
             <ProtectedRoute>
               <Dashboard />

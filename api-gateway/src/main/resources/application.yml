@@ -19,6 +19,14 @@ spring:
           uri: lb://product-catalog-service
           predicates:
             - Path=/api/v1/products/**, /api/v1/categories/**, /api/v1/brands/**
+        - id: warehouse-service
+          uri: lb://warehouse-service
+          predicates:
+            - Path=/api/v1/warehouses/**
+        - id: supplier-service
+          uri: lb://supplier-service
+          predicates:
+            - Path=/api/v1/suppliers/**
       globalcors:
         cors-configurations:
           '[/**]':
