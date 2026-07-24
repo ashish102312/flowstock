@@ -11,6 +11,9 @@ import VerifyEmailPage from './pages/VerifyEmailPage';
 import WarehousePage from './pages/WarehousePage';
 import SupplierPage from './pages/SupplierPage';
 import InventoryPage from './pages/InventoryPage';
+import OrdersPage from './pages/OrdersPage';
+import { CartProvider } from './context/CartContext';
+import CartDrawer from './components/CartDrawer';
 import { authApi } from './services/api';
 import toast from 'react-hot-toast';
 
@@ -164,31 +167,35 @@ function Dashboard() {
 // ── Main App Routes ──────────────────────────────────────────────────────────
 export default function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<WelcomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/reset-password" element={<ResetPasswordPage />} />
-          <Route path="/verify-email" element={<VerifyEmailPage />} />
-          <Route path="/oauth2/callback" element={<OAuth2Callback />} />
-          <Route path="/warehouses" element={<WarehousePage />} />
-          <Route path="/suppliers" element={<SupplierPage />} />
-          <Route path="/inventory" element={<InventoryPage />} />
-          <Route path="/dashboard" element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          } />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
-      <Toaster position="top-right" toastOptions={{
-        className: 'bg-brand-900 border border-white/10 text-white text-sm rounded-xl',
-        duration: 4000,
-      }} />
-    </AuthProvider>
+    <CartProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <Toaster position="top-right" toastOptions={{
+            className: 'bg-brand-900 border border-white/10 text-white text-sm rounded-xl',
+            duration: 4000,
+          }} />
+          <CartDrawer />
+          <Routes>
+            <Route path="/" element={<WelcomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
+            <Route path="/verify-email" element={<VerifyEmailPage />} />
+            <Route path="/oauth2/callback" element={<OAuth2Callback />} />
+            <Route path="/warehouses" element={<WarehousePage />} />
+            <Route path="/suppliers" element={<SupplierPage />} />
+            <Route path="/inventory" element={<InventoryPage />} />
+            <Route path="/orders" element={<OrdersPage />} />
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </CartProvider>
   );
 }

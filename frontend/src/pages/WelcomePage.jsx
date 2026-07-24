@@ -1,8 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 import './WelcomePage.css';
 
 export default function WelcomePage() {
+  const { cartItems, setIsCartOpen, addToCart } = useCart();
+
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY;
@@ -17,7 +20,7 @@ export default function WelcomePage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const [products, setProducts] = React.useState([]);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     import('../services/api').then(({ productsApi }) => {
@@ -38,9 +41,20 @@ export default function WelcomePage() {
           <Link to="/">Operations</Link>
           <Link to="/login">Sign In</Link>
         </nav>
-        <Link to="/login" className="cart-btn">
-          Cart <span>0</span>
-        </Link>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <button 
+            onClick={() => setIsCartOpen(true)}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', position: 'relative' }}
+          >
+            🛒
+            {cartItems.length > 0 && (
+              <span style={{ position: 'absolute', top: '-5px', right: '-10px', background: 'var(--color-olive)', color: 'var(--color-forest)', fontSize: '10px', fontWeight: 'bold', width: '18px', height: '18px', borderRadius: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {cartItems.length}
+              </span>
+            )}
+          </button>
+          <Link to="/login" className="cart-btn label-text">Sign In</Link>
+        </div>
       </header>
 
       {/* Hero Section */}

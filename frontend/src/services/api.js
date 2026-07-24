@@ -134,3 +134,10 @@ export const inventoryApi = {
   adjustStock: (id, data) => api.post(`/inventory/${id}/adjust`, data),
   reserveStock: (id, data) => api.post(`/inventory/${id}/reserve`, data),
 };
+
+// ── Order API calls ────────────────────────────────────────────────────────────
+export const orderApi = {
+  placeOrder: (data) => api.post('/orders', data),
+  getMyOrders: () => api.get('/orders/my-orders'),
+  getOrderById: (id) => api.get(`/orders/${id}`),
+};
