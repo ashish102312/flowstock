@@ -16,7 +16,7 @@ public class ProductMapper {
             return null;
         }
 
-        return ProductDTO.Builder()
+        return ProductDTO.builder()
                 .id(product.getId())
                 .name(product.getName())
                 .description(product.getDescription())
@@ -35,7 +35,7 @@ public class ProductMapper {
         if (category == null) {
             return null;
         }
-        return CategoryDTO.Builder()
+        return CategoryDTO.builder()
                 .id(category.getId())
                 .name(category.getName())
                 .description(category.getDescription())
@@ -46,7 +46,7 @@ public class ProductMapper {
         if (brand == null) {
             return null;
         }
-        return BrandDTO.Builder()
+        return BrandDTO.builder()
                 .id(brand.getId())
                 .name(brand.getName())
                 .description(brand.getDescription())

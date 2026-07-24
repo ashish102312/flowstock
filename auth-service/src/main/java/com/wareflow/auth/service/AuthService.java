@@ -67,7 +67,7 @@ public class AuthService {
         String requestedRoleName = "ROLE_USER";
         if (request.role() != null && !request.role().equalsIgnoreCase("USER")) {
             if (request.adminSecret() == null || !request.adminSecret().equals("flowstock-secret-2026")) {
-                throw new AuthException(org.springframework.http.HttpStatus.FORBIDDEN, "Invalid admin secret for privileged role registration");
+                throw new AuthException(org.springframework.http.HttpStatus.FORBIDDEN, "Invalid admin secret for privileged role registration", "INVALID_ADMIN_SECRET");
             }
             if (request.role().equalsIgnoreCase("ADMIN")) {
                 requestedRoleName = "ROLE_ADMIN";
