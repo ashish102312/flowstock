@@ -3,9 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Eye, EyeOff, Mail, Lock, User, AlertCircle, Loader2, Check, Building2, Shield } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Check } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { authApi } from '../services/api';
+import './WelcomePage.css';
 
 const schema = z.object({
   firstName: z.string().min(2, 'At least 2 characters').max(100),
@@ -27,8 +28,8 @@ const schema = z.object({
 });
 
 const PasswordRule = ({ met, label }) => (
-  <div className={`flex items-center gap-1.5 text-xs transition-colors ${met ? 'text-green-400' : 'text-white/30'}`}>
-    <Check className={`w-3 h-3 ${met ? 'opacity-100' : 'opacity-30'}`} />
+  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', color: met ? 'var(--color-forest)' : 'rgba(1, 71, 46, 0.4)', transition: 'color 0.2s' }}>
+    <Check size={12} style={{ opacity: met ? 1 : 0.3 }} />
     {label}
   </div>
 );
@@ -41,13 +42,10 @@ export default function RegisterPage() {
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({
     resolver: zodResolver(schema),
     mode: 'onChange',
-    defaultValues: {
-      role: 'USER'
-    }
+    defaultValues: { role: 'USER' }
   });
 
   const selectedRole = watch('role');
-
   const pw = watch('password', '');
   const rules = {
     length: pw.length >= 8,
@@ -66,6 +64,7 @@ export default function RegisterPage() {
         email: data.email,
         password: data.password,
         role: data.role,
+        adminSecret: data.adminSecret
       });
       toast.success('Account created! Check your email to verify.');
       navigate('/login');
@@ -76,185 +75,162 @@ export default function RegisterPage() {
     }
   };
 
+  const inputStyle = (error) => ({
+    width: '100%',
+    padding: '1rem',
+    borderRadius: '1.5rem',
+    border: `2px solid ${error ? '#e65100' : 'var(--color-olive)'}`,
+    background: 'var(--color-cream)',
+    color: 'var(--color-forest)',
+    outline: 'none',
+    fontSize: '0.9rem'
+  });
+
   return (
-    <div className="min-h-screen bg-brand-950 flex items-center justify-center p-6">
-      <div className="w-full max-w-lg animate-slide-up">
+    <div className="welcome-page" style={{ minHeight: '100vh', background: 'var(--color-cream)' }}>
+      <header className="welcome-header">
+        <Link to="/" className="logo">-FLOWSTOCK</Link>
+        <nav className="nav-pill">
+          <Link to="/">Inventory</Link>
+          <Link to="/">Warehouses</Link>
+          <Link to="/">Operations</Link>
+          <Link to="/dashboard">Dashboard</Link>
+        </nav>
+        <Link to="/login" className="cart-btn label-text">Sign In</Link>
+      </header>
 
-        {/* Logo */}
-        <div className="flex items-center gap-2 mb-10">
-          <div className="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center">
-            <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-            </svg>
-          </div>
-          <span className="text-white font-bold text-lg">FlowStock</span>
-        </div>
+      <section style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        padding: '8rem 2rem 4rem 2rem'
+      }}>
+        <div style={{
+          background: 'white',
+          padding: '3rem',
+          borderRadius: '3rem',
+          boxShadow: '0 25px 50px -12px rgba(1, 71, 46, 0.2)',
+          width: '100%',
+          maxWidth: '600px'
+        }}>
+          <h2 className="anton" style={{ fontSize: '2.5rem', margin: '0 0 0.5rem 0', textAlign: 'center', color: 'var(--color-forest)' }}>
+            CREATE ACCOUNT
+          </h2>
+          <p style={{ textAlign: 'center', marginBottom: '2rem', opacity: 0.6, fontSize: '0.9rem' }}>
+            Get started with FlowStock in minutes.
+          </p>
 
-        <div className="auth-card p-8 md:p-10">
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold text-white">Create your account</h1>
-            <p className="text-white/40 text-sm mt-1.5">Get started with FlowStock in minutes.</p>
-          </div>
-
-          <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
-            {/* Name row */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="firstName" className="field-label">First name</label>
-                <div className="relative">
-                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 pointer-events-none" />
-                  <input id="firstName" type="text" placeholder="Ashish"
-                    {...register('firstName')}
-                    className={`field-input pl-10 ${errors.firstName ? 'field-input-error' : ''}`} />
-                </div>
-                {errors.firstName && <p className="field-error"><AlertCircle className="w-3 h-3" />{errors.firstName.message}</p>}
+          <form onSubmit={handleSubmit(onSubmit)} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <label htmlFor="firstName" className="label-text">First Name</label>
+                <input id="firstName" placeholder="Ashish" {...register('firstName')} style={inputStyle(errors.firstName)} />
+                {errors.firstName && <p className="label-text" style={{ color: '#e65100', fontSize: '9px' }}>{errors.firstName.message}</p>}
               </div>
-              <div>
-                <label htmlFor="lastName" className="field-label">Last name</label>
-                <input id="lastName" type="text" placeholder="Bhardwaj"
-                  {...register('lastName')}
-                  className={`field-input ${errors.lastName ? 'field-input-error' : ''}`} />
-                {errors.lastName && <p className="field-error"><AlertCircle className="w-3 h-3" />{errors.lastName.message}</p>}
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <label htmlFor="lastName" className="label-text">Last Name</label>
+                <input id="lastName" placeholder="Bhardwaj" {...register('lastName')} style={inputStyle(errors.lastName)} />
+                {errors.lastName && <p className="label-text" style={{ color: '#e65100', fontSize: '9px' }}>{errors.lastName.message}</p>}
               </div>
             </div>
 
-            {/* Role Cards */}
-            <div>
-              <label className="field-label mb-3 block">Account Type</label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {/* Standard User */}
-                <div 
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => setValue('role', 'USER', { shouldValidate: true })}
-                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setValue('role', 'USER', { shouldValidate: true }); } }}
-                  className={`border rounded-xl p-4 cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent ${
-                    selectedRole === 'USER' 
-                    ? 'bg-brand-500/20 border-brand-500 ring-1 ring-brand-500' 
-                    : 'bg-white/5 border-white/10 hover:bg-white/10'
-                  }`}
-                >
-                  <User className={`w-6 h-6 mb-2 ${selectedRole === 'USER' ? 'text-brand-400' : 'text-white/40'}`} />
-                  <h3 className="font-semibold text-sm text-white">Standard User</h3>
-                  <p className="text-xs text-white/50 mt-1">Basic access profile</p>
-                </div>
-
-                {/* Warehouse Owner */}
-                <div 
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => setValue('role', 'MANAGER', { shouldValidate: true })}
-                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setValue('role', 'MANAGER', { shouldValidate: true }); } }}
-                  className={`border rounded-xl p-4 cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent ${
-                    selectedRole === 'MANAGER' 
-                    ? 'bg-brand-500/20 border-brand-500 ring-1 ring-brand-500' 
-                    : 'bg-white/5 border-white/10 hover:bg-white/10'
-                  }`}
-                >
-                  <Building2 className={`w-6 h-6 mb-2 ${selectedRole === 'MANAGER' ? 'text-brand-400' : 'text-white/40'}`} />
-                  <h3 className="font-semibold text-sm text-white">Warehouse</h3>
-                  <p className="text-xs text-white/50 mt-1">Manage inventory</p>
-                </div>
-
-                {/* Administrator */}
-                <div 
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => setValue('role', 'ADMIN', { shouldValidate: true })}
-                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setValue('role', 'ADMIN', { shouldValidate: true }); } }}
-                  className={`border rounded-xl p-4 cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent ${
-                    selectedRole === 'ADMIN' 
-                    ? 'bg-red-500/20 border-red-500 ring-1 ring-red-500' 
-                    : 'bg-white/5 border-white/10 hover:bg-white/10'
-                  }`}
-                >
-                  <Shield className={`w-6 h-6 mb-2 ${selectedRole === 'ADMIN' ? 'text-red-400' : 'text-white/40'}`} />
-                  <h3 className="font-semibold text-sm text-white">Administrator</h3>
-                  <p className="text-xs text-white/50 mt-1">Full system access</p>
-                </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <label className="label-text">Account Type</label>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
+                {['USER', 'MANAGER', 'ADMIN'].map(role => (
+                  <div key={role}
+                    onClick={() => setValue('role', role, { shouldValidate: true })}
+                    style={{
+                      border: `2px solid ${selectedRole === role ? 'var(--color-forest)' : 'var(--color-olive)'}`,
+                      background: selectedRole === role ? 'var(--color-olive)' : 'white',
+                      padding: '1rem 0.5rem',
+                      borderRadius: '1.5rem',
+                      cursor: 'pointer',
+                      textAlign: 'center',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <span className="label-text" style={{ color: 'var(--color-forest)' }}>{role}</span>
+                  </div>
+                ))}
               </div>
-              <input type="hidden" {...register('role')} />
-              {errors.role && <p className="field-error mt-2"><AlertCircle className="w-3 h-3" />{errors.role.message}</p>}
             </div>
 
-            {/* Admin Secret Code (Conditionally Rendered) */}
             {(selectedRole === 'ADMIN' || selectedRole === 'MANAGER') && (
-              <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-                <label htmlFor="adminSecret" className="field-label flex items-center justify-between">
-                  <span>Secret Registration Code</span>
-                  <span className="text-[10px] text-brand-400 uppercase tracking-wider font-bold bg-brand-500/10 px-2 py-0.5 rounded">Required for role</span>
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-400/50 pointer-events-none" />
-                  <input id="adminSecret" type="text" placeholder="Enter authorization code"
-                    {...register('adminSecret')}
-                    className="field-input pl-10 border-brand-500/30 focus:border-brand-500" />
-                </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <label htmlFor="adminSecret" className="label-text">Secret Code (Required)</label>
+                <input id="adminSecret" placeholder="Enter authorization code" {...register('adminSecret')} style={inputStyle(errors.adminSecret)} />
+                {errors.adminSecret && <p className="label-text" style={{ color: '#e65100', fontSize: '9px' }}>{errors.adminSecret.message}</p>}
               </div>
             )}
 
-            {/* Email */}
-            <div>
-              <label htmlFor="email" className="field-label">Email address</label>
-              <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 pointer-events-none" />
-                <input id="email" type="email" autoComplete="email" placeholder="you@company.com"
-                  {...register('email')}
-                  className={`field-input pl-10 ${errors.email ? 'field-input-error' : ''}`} />
-              </div>
-              {errors.email && <p className="field-error"><AlertCircle className="w-3 h-3" />{errors.email.message}</p>}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <label htmlFor="email" className="label-text">Email Address</label>
+              <input id="email" type="email" placeholder="you@company.com" {...register('email')} style={inputStyle(errors.email)} />
+              {errors.email && <p className="label-text" style={{ color: '#e65100', fontSize: '9px' }}>{errors.email.message}</p>}
             </div>
 
-            {/* Password */}
-            <div>
-              <label htmlFor="password" className="field-label">Password</label>
-              <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 pointer-events-none" />
-                <input id="password" type={showPassword ? 'text' : 'password'}
-                  autoComplete="new-password" placeholder="Create a strong password"
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <label htmlFor="password" className="label-text">Password</label>
+              <div style={{ position: 'relative' }}>
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Create a strong password"
                   {...register('password')}
-                  className={`field-input pl-10 pr-10 ${errors.password ? 'field-input-error' : ''}`} />
-                <button type="button" onClick={() => setShowPassword(v => !v)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors">
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  style={{ ...inputStyle(errors.password), paddingRight: '3rem' }}
+                />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-forest)' }}>
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
-              {/* Password strength rules */}
-              <div className="mt-2.5 grid grid-cols-2 gap-1">
-                <PasswordRule met={rules.length}  label="8+ characters" />
-                <PasswordRule met={rules.upper}   label="Uppercase letter" />
-                <PasswordRule met={rules.lower}   label="Lowercase letter" />
-                <PasswordRule met={rules.digit}   label="Number" />
-                <PasswordRule met={rules.special} label="Special character" />
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.25rem', marginTop: '0.25rem' }}>
+                <PasswordRule met={rules.length} label="8+ chars" />
+                <PasswordRule met={rules.upper} label="Uppercase" />
+                <PasswordRule met={rules.lower} label="Lowercase" />
+                <PasswordRule met={rules.digit} label="Number" />
+                <PasswordRule met={rules.special} label="Special" />
               </div>
             </div>
 
-            {/* Confirm password */}
-            <div>
-              <label htmlFor="confirmPassword" className="field-label">Confirm password</label>
-              <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 pointer-events-none" />
-                <input id="confirmPassword" type="password" autoComplete="new-password"
-                  placeholder="Repeat your password"
-                  {...register('confirmPassword')}
-                  className={`field-input pl-10 ${errors.confirmPassword ? 'field-input-error' : ''}`} />
-              </div>
-              {errors.confirmPassword && <p className="field-error"><AlertCircle className="w-3 h-3" />{errors.confirmPassword.message}</p>}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <label htmlFor="confirmPassword" className="label-text">Confirm Password</label>
+              <input id="confirmPassword" type="password" placeholder="Repeat your password" {...register('confirmPassword')} style={inputStyle(errors.confirmPassword)} />
+              {errors.confirmPassword && <p className="label-text" style={{ color: '#e65100', fontSize: '9px' }}>{errors.confirmPassword.message}</p>}
             </div>
 
-            <button id="register-btn" type="submit" disabled={isLoading}
-              className="btn-primary flex items-center justify-center gap-2 mt-2">
-              {isLoading ? <><Loader2 className="w-4 h-4 animate-spin" />Creating account…</> : 'Create account'}
+            <button
+              type="submit"
+              disabled={isLoading}
+              style={{
+                background: 'var(--color-forest)',
+                color: 'white',
+                border: 'none',
+                padding: '1rem',
+                borderRadius: '2rem',
+                marginTop: '1rem',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}
+            >
+              {isLoading ? <><Loader2 className="animate-spin" size={18} /> CREATING...</> : 'CREATE ACCOUNT'}
             </button>
           </form>
 
-          <p className="text-center text-white/40 text-sm mt-6">
+          <p style={{ textAlign: 'center', marginTop: '2rem', fontSize: '0.9rem', opacity: 0.6 }}>
             Already have an account?{' '}
-            <Link to="/login" className="text-brand-400 hover:text-brand-300 font-medium transition-colors">Sign in</Link>
+            <Link to="/login" style={{ color: 'var(--color-forest)', fontWeight: 'bold', textDecoration: 'none' }}>
+              Sign in
+            </Link>
           </p>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

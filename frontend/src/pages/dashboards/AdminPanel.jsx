@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ShieldAlert, Users, Database, Loader2, CheckCircle, XCircle } from 'lucide-react';
+import { ShieldAlert, Users, Loader2, CheckCircle, XCircle } from 'lucide-react';
 import { usersApi } from '../../services/api';
 import toast from 'react-hot-toast';
 
@@ -20,74 +20,77 @@ export default function AdminPanel({ user }) {
   }, []);
 
   return (
-    <div className="space-y-6">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <div>
-        <h2 className="text-2xl font-bold flex items-center gap-2">
-          <ShieldAlert className="text-red-400 w-6 h-6" /> 
-          Administrator Dashboard
+        <h2 className="anton" style={{ fontSize: '2.5rem', display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--color-forest)', margin: 0 }}>
+          <div style={{ background: '#ffe0b2', padding: '0.5rem', borderRadius: '1rem', display: 'flex' }}>
+            <ShieldAlert style={{ color: '#e65100' }} />
+          </div>
+          ADMINISTRATOR DASHBOARD
         </h2>
-        <p className="text-white/40 mt-1">System-wide administration and management.</p>
+        <p style={{ opacity: 0.6, marginTop: '0.5rem' }}>System-wide administration and management.</p>
       </div>
 
-      <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden mt-6">
-        <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between">
-          <h3 className="font-semibold text-white flex items-center gap-2">
-            <Users className="w-5 h-5 text-brand-400" />
-            Registered Users
+      <div style={{ background: 'white', border: '2px solid var(--color-olive)', borderRadius: '2rem', overflow: 'hidden' }}>
+        <div style={{ padding: '1.5rem', borderBottom: '2px solid var(--color-olive)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--color-cream)' }}>
+          <h3 className="anton" style={{ margin: 0, fontSize: '1.25rem', color: 'var(--color-forest)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Users style={{ color: 'var(--color-forest)' }} />
+            REGISTERED USERS
           </h3>
-          <span className="text-xs font-semibold bg-white/10 px-2.5 py-1 rounded-full text-white/70">
-            {users.length} Users
+          <span className="label-text" style={{ background: 'var(--color-forest)', color: 'white', padding: '0.25rem 0.75rem', borderRadius: '1rem' }}>
+            {users.length} USERS
           </span>
         </div>
         
         {isLoading ? (
-          <div className="flex justify-center items-center p-10">
-            <Loader2 className="w-6 h-6 animate-spin text-white/50" />
+          <div style={{ padding: '4rem', display: 'flex', justifyContent: 'center' }}>
+            <Loader2 className="animate-spin" style={{ color: 'var(--color-forest)' }} size={32} />
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-white/70">
-              <thead className="bg-white/5 text-white/50 font-semibold border-b border-white/10">
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
+              <thead style={{ background: 'var(--color-cream)', borderBottom: '2px solid var(--color-olive)' }}>
                 <tr>
-                  <th className="px-6 py-3">Name</th>
-                  <th className="px-6 py-3">Email</th>
-                  <th className="px-6 py-3">Roles</th>
-                  <th className="px-6 py-3 text-center">Verified</th>
-                  <th className="px-6 py-3">Joined</th>
+                  <th className="label-text" style={{ padding: '1rem 1.5rem', color: 'var(--color-forest)' }}>NAME</th>
+                  <th className="label-text" style={{ padding: '1rem 1.5rem', color: 'var(--color-forest)' }}>EMAIL</th>
+                  <th className="label-text" style={{ padding: '1rem 1.5rem', color: 'var(--color-forest)' }}>ROLES</th>
+                  <th className="label-text" style={{ padding: '1rem 1.5rem', color: 'var(--color-forest)', textAlign: 'center' }}>VERIFIED</th>
+                  <th className="label-text" style={{ padding: '1rem 1.5rem', color: 'var(--color-forest)' }}>JOINED</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody>
                 {users.map((u) => (
-                  <tr key={u.id} className="hover:bg-white/5 transition-colors">
-                    <td className="px-6 py-4 font-medium text-white">{u.firstName} {u.lastName}</td>
-                    <td className="px-6 py-4">{u.email}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-wrap gap-1">
+                  <tr key={u.id} style={{ borderBottom: '1px solid rgba(1, 71, 46, 0.1)' }}>
+                    <td style={{ padding: '1rem 1.5rem', fontWeight: 'bold' }}>{u.firstName} {u.lastName}</td>
+                    <td style={{ padding: '1rem 1.5rem', opacity: 0.8 }}>{u.email}</td>
+                    <td style={{ padding: '1rem 1.5rem' }}>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
                         {u.roles.map(r => (
-                          <span key={r} className={`px-2 py-0.5 text-xs rounded-full font-semibold ${
-                            r === 'ROLE_ADMIN' ? 'bg-red-500/20 text-red-400' :
-                            r === 'ROLE_MANAGER' ? 'bg-brand-500/20 text-brand-400' :
-                            'bg-white/10 text-white/60'
-                          }`}>
+                          <span key={r} className="label-text" style={{ 
+                            padding: '0.25rem 0.5rem', 
+                            borderRadius: '1rem',
+                            background: r === 'ROLE_ADMIN' ? '#ffe0b2' : r === 'ROLE_MANAGER' ? 'var(--color-sage)' : 'var(--color-olive)',
+                            color: r === 'ROLE_ADMIN' ? '#e65100' : 'var(--color-forest)'
+                          }}>
                             {r.replace('ROLE_', '')}
                           </span>
                         ))}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-center">
+                    <td style={{ padding: '1rem 1.5rem', textAlign: 'center' }}>
                       {u.emailVerified ? 
-                        <CheckCircle className="w-5 h-5 text-green-400 mx-auto" /> : 
-                        <XCircle className="w-5 h-5 text-white/20 mx-auto" />}
+                        <CheckCircle size={20} style={{ color: 'var(--color-forest)', margin: '0 auto' }} /> : 
+                        <XCircle size={20} style={{ color: 'rgba(1, 71, 46, 0.3)', margin: '0 auto' }} />}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="label-text" style={{ padding: '1rem 1.5rem', opacity: 0.6 }}>
                       {new Date(u.createdAt).toLocaleDateString()}
                     </td>
                   </tr>
                 ))}
                 {users.length === 0 && (
                   <tr>
-                    <td colSpan="5" className="px-6 py-8 text-center text-white/40">
-                      No users found.
+                    <td colSpan="5" style={{ padding: '3rem', textAlign: 'center', opacity: 0.5 }}>
+                      <span className="label-text">NO USERS FOUND.</span>
                     </td>
                   </tr>
                 )}

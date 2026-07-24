@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { CheckCircle2, XCircle, Loader2 } from 'lucide-react';
 import { authApi } from '../services/api';
+import './WelcomePage.css';
 
 export default function VerifyEmailPage() {
   const [status, setStatus] = useState('loading');
@@ -21,54 +22,91 @@ export default function VerifyEmailPage() {
   }, [searchParams]);
 
   return (
-    <div className="min-h-screen bg-brand-950 flex items-center justify-center p-6">
-      <div className="w-full max-w-md text-center animate-fade-in">
+    <div className="welcome-page" style={{ minHeight: '100vh', background: 'var(--color-cream)' }}>
+      <header className="welcome-header">
+        <Link to="/" className="logo">-FLOWSTOCK</Link>
+        <nav className="nav-pill">
+          <Link to="/">Inventory</Link>
+          <Link to="/">Warehouses</Link>
+          <Link to="/">Operations</Link>
+          <Link to="/dashboard">Dashboard</Link>
+        </nav>
+        <Link to="/login" className="cart-btn label-text">Sign In</Link>
+      </header>
 
-        <div className="flex items-center justify-center gap-2 mb-12">
-          <div className="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center">
-            <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-            </svg>
-          </div>
-          <span className="text-white font-bold text-lg">FlowStock</span>
-        </div>
-
-        <div className="auth-card p-10">
+      <section style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        padding: '8rem 2rem 4rem 2rem'
+      }}>
+        <div style={{
+          background: 'white',
+          padding: '4rem',
+          borderRadius: '3rem',
+          boxShadow: '0 25px 50px -12px rgba(1, 71, 46, 0.2)',
+          width: '100%',
+          maxWidth: '500px',
+          textAlign: 'center'
+        }}>
           {status === 'loading' && (
-            <div className="space-y-4">
-              <Loader2 className="w-12 h-12 text-brand-400 animate-spin mx-auto" />
-              <p className="text-white/60">Verifying your email…</p>
+            <div style={{ padding: '2rem 0' }}>
+              <Loader2 className="animate-spin" size={48} style={{ color: 'var(--color-forest)', margin: '0 auto 1.5rem auto' }} />
+              <h2 className="anton" style={{ fontSize: '2rem', margin: '0 0 0.5rem 0', color: 'var(--color-forest)' }}>
+                VERIFYING...
+              </h2>
+              <p style={{ opacity: 0.6, fontSize: '0.9rem' }}>Please wait while we confirm your email.</p>
             </div>
           )}
 
           {status === 'success' && (
-            <div className="space-y-4 animate-slide-up">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-green-500/10 border border-green-500/20 rounded-full mx-auto">
-                <CheckCircle2 className="w-8 h-8 text-green-400" />
+            <div style={{ padding: '2rem 0' }}>
+              <div style={{ display: 'inline-flex', background: 'var(--color-sage)', color: 'var(--color-forest)', padding: '1.5rem', borderRadius: '50%', marginBottom: '1.5rem' }}>
+                <CheckCircle2 size={48} />
               </div>
-              <h1 className="text-2xl font-bold text-white">Email Verified</h1>
-              <p className="text-white/40 text-sm">{message}</p>
-              <Link to="/login" className="btn-primary inline-block text-center mt-2">
-                Sign in to FlowStock
+              <h2 className="anton" style={{ fontSize: '2rem', margin: '0 0 0.5rem 0', color: 'var(--color-forest)' }}>
+                EMAIL VERIFIED
+              </h2>
+              <p style={{ opacity: 0.6, fontSize: '0.9rem', marginBottom: '2rem' }}>{message}</p>
+              <Link to="/login" style={{
+                display: 'inline-block',
+                background: 'var(--color-forest)',
+                color: 'white',
+                padding: '1rem 2rem',
+                borderRadius: '2rem',
+                fontWeight: 'bold',
+                textDecoration: 'none'
+              }}>
+                SIGN IN
               </Link>
             </div>
           )}
 
           {status === 'error' && (
-            <div className="space-y-4 animate-slide-up">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-red-500/10 border border-red-500/20 rounded-full mx-auto">
-                <XCircle className="w-8 h-8 text-red-400" />
+            <div style={{ padding: '2rem 0' }}>
+              <div style={{ display: 'inline-flex', background: '#ffe0b2', color: '#e65100', padding: '1.5rem', borderRadius: '50%', marginBottom: '1.5rem' }}>
+                <XCircle size={48} />
               </div>
-              <h1 className="text-2xl font-bold text-white">Verification Failed</h1>
-              <p className="text-white/40 text-sm">{message}</p>
-              <Link to="/login" className="btn-ghost inline-block text-center mt-2">
-                Back to sign in
+              <h2 className="anton" style={{ fontSize: '2rem', margin: '0 0 0.5rem 0', color: 'var(--color-forest)' }}>
+                VERIFICATION FAILED
+              </h2>
+              <p style={{ opacity: 0.6, fontSize: '0.9rem', marginBottom: '2rem' }}>{message}</p>
+              <Link to="/login" style={{
+                display: 'inline-block',
+                background: 'var(--color-olive)',
+                color: 'var(--color-forest)',
+                padding: '1rem 2rem',
+                borderRadius: '2rem',
+                fontWeight: 'bold',
+                textDecoration: 'none'
+              }}>
+                BACK TO SIGN IN
               </Link>
             </div>
           )}
         </div>
-      </div>
+      </section>
     </div>
   );
 }

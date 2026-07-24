@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Mail, AlertCircle, Loader2, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Loader2, CheckCircle2 } from 'lucide-react';
 import { authApi } from '../services/api';
+import './WelcomePage.css';
 
 const schema = z.object({
   email: z.string().email('Please enter a valid email address'),
 });
+
 export default function ForgotPasswordPage() {
   const [sent, setSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,73 +32,104 @@ export default function ForgotPasswordPage() {
     }
   };
 
+  const inputStyle = (error) => ({
+    width: '100%',
+    padding: '1rem',
+    borderRadius: '1.5rem',
+    border: `2px solid ${error ? '#e65100' : 'var(--color-olive)'}`,
+    background: 'var(--color-cream)',
+    color: 'var(--color-forest)',
+    outline: 'none',
+    fontSize: '0.9rem'
+  });
+
   return (
-    <div className="min-h-screen bg-brand-950 flex items-center justify-center p-6">
-      <div className="w-full max-w-md animate-slide-up">
+    <div className="welcome-page" style={{ minHeight: '100vh', background: 'var(--color-cream)' }}>
+      <header className="welcome-header">
+        <Link to="/" className="logo">-FLOWSTOCK</Link>
+        <nav className="nav-pill">
+          <Link to="/">Inventory</Link>
+          <Link to="/">Warehouses</Link>
+          <Link to="/">Operations</Link>
+          <Link to="/dashboard">Dashboard</Link>
+        </nav>
+        <Link to="/login" className="cart-btn label-text">Sign In</Link>
+      </header>
 
-        {/* Logo */}
-        <div className="flex items-center gap-2 mb-10">
-          <div className="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center">
-            <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-            </svg>
-          </div>
-          <span className="text-white font-bold text-lg">FlowStock</span>
-        </div>
-
-        <div className="auth-card p-8 md:p-10">
+      <section style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        padding: '8rem 2rem 4rem 2rem'
+      }}>
+        <div style={{
+          background: 'white',
+          padding: '3rem',
+          borderRadius: '3rem',
+          boxShadow: '0 25px 50px -12px rgba(1, 71, 46, 0.2)',
+          width: '100%',
+          maxWidth: '500px'
+        }}>
           {!sent ? (
             <>
-              <div className="mb-8">
-                <h1 className="text-2xl font-bold text-white">Reset your password</h1>
-                <p className="text-white/40 text-sm mt-1.5">
-                  Enter your email and we'll send you a reset link valid for 15 minutes.
-                </p>
-              </div>
+              <h2 className="anton" style={{ fontSize: '2.5rem', margin: '0 0 0.5rem 0', textAlign: 'center', color: 'var(--color-forest)' }}>
+                RESET PASSWORD
+              </h2>
+              <p style={{ textAlign: 'center', marginBottom: '2rem', opacity: 0.6, fontSize: '0.9rem' }}>
+                Enter your email and we'll send you a reset link valid for 15 minutes.
+              </p>
 
-              <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
-                <div>
-                  <label htmlFor="email" className="field-label">Email address</label>
-                  <div className="relative">
-                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 pointer-events-none" />
-                    <input id="email" type="email" autoComplete="email"
-                      placeholder="you@company.com"
-                      {...register('email')}
-                      className={`field-input pl-10 ${errors.email ? 'field-input-error' : ''}`} />
-                  </div>
-                  {errors.email && (
-                    <p className="field-error"><AlertCircle className="w-3 h-3" />{errors.email.message}</p>
-                  )}
+              <form onSubmit={handleSubmit(onSubmit)} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  <label htmlFor="email" className="label-text">Email Address</label>
+                  <input id="email" type="email" placeholder="you@company.com" {...register('email')} style={inputStyle(errors.email)} />
+                  {errors.email && <p className="label-text" style={{ color: '#e65100', fontSize: '9px' }}>{errors.email.message}</p>}
                 </div>
 
-                <button id="forgot-submit-btn" type="submit" disabled={isLoading}
-                  className="btn-primary flex items-center justify-center gap-2">
-                  {isLoading ? <><Loader2 className="w-4 h-4 animate-spin" />Sending…</> : 'Send reset link'}
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  style={{
+                    background: 'var(--color-forest)',
+                    color: 'white',
+                    border: 'none',
+                    padding: '1rem',
+                    borderRadius: '2rem',
+                    marginTop: '1rem',
+                    cursor: 'pointer',
+                    fontWeight: 'bold',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}
+                >
+                  {isLoading ? <><Loader2 className="animate-spin" size={18} /> SENDING...</> : 'SEND RESET LINK'}
                 </button>
               </form>
             </>
           ) : (
-            <div className="text-center py-4 animate-fade-in">
-              <div className="inline-flex items-center justify-center w-14 h-14 bg-green-500/10 border border-green-500/20 rounded-full mb-5">
-                <CheckCircle2 className="w-7 h-7 text-green-400" />
+            <div style={{ textAlign: 'center', padding: '2rem 0' }}>
+              <div style={{ display: 'inline-flex', background: 'var(--color-sage)', color: 'var(--color-forest)', padding: '1rem', borderRadius: '50%', marginBottom: '1rem' }}>
+                <CheckCircle2 size={40} />
               </div>
-              <h2 className="text-xl font-bold text-white mb-2">Check your inbox</h2>
-              <p className="text-white/40 text-sm leading-relaxed">
-                If <span className="text-white/70">{getValues('email')}</span> is registered, a reset link has been sent. Check your spam folder too.
+              <h2 className="anton" style={{ fontSize: '2rem', margin: '0 0 0.5rem 0', color: 'var(--color-forest)' }}>
+                CHECK YOUR INBOX
+              </h2>
+              <p style={{ opacity: 0.6, fontSize: '0.9rem', lineHeight: '1.5' }}>
+                If <span style={{ fontWeight: 'bold' }}>{getValues('email')}</span> is registered, a reset link has been sent. Check your spam folder too.
               </p>
             </div>
           )}
 
-          <div className="mt-8 pt-6 border-t border-white/8">
-            <Link to="/login"
-              className="flex items-center justify-center gap-2 text-white/40 hover:text-white/70 text-sm transition-colors">
-              <ArrowLeft className="w-4 h-4" />
-              Back to sign in
+          <div style={{ borderTop: '1px solid rgba(1, 71, 46, 0.1)', marginTop: '2rem', paddingTop: '2rem', textAlign: 'center' }}>
+            <Link to="/login" style={{ color: 'var(--color-forest)', fontWeight: 'bold', textDecoration: 'none', fontSize: '0.9rem' }}>
+              BACK TO SIGN IN
             </Link>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
