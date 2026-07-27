@@ -27,7 +27,7 @@ export function CartProvider({ children }) {
         productId: product.id,
         warehouseId,
         name: product.name,
-        price: product.basePrice,
+        price: product.price ?? product.basePrice ?? 0,
         quantity: 1
       }];
     });
@@ -39,7 +39,10 @@ export function CartProvider({ children }) {
   };
 
   const updateQuantity = (productId, warehouseId, quantity) => {
-    if (quantity < 1) return;
+    if (quantity < 1) {
+      removeFromCart(productId, warehouseId);
+      return;
+    }
     setCartItems(prev => prev.map(item =>
       item.productId === productId && item.warehouseId === warehouseId
         ? { ...item, quantity }

@@ -34,7 +34,8 @@ export default function LoginPage() {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = `${import.meta.env.VITE_API_URL || 'http://localhost:8081'}/oauth2/authorization/google`;
+    const authBase = import.meta.env.VITE_AUTH_URL || 'http://localhost:8081';
+    window.location.href = `${authBase}/oauth2/authorization/google`;
   };
 
   return (

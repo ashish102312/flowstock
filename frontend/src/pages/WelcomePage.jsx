@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { productsApi, warehouseApi } from '../services/api';
+import toast from 'react-hot-toast';
 import './WelcomePage.css';
 
 export default function WelcomePage() {
   const { cartItems, setIsCartOpen, addToCart } = useCart();
+  const [products, setProducts] = useState([]);
+  const [defaultWarehouseId, setDefaultWarehouseId] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,13 +24,27 @@ export default function WelcomePage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const [products, setProducts] = useState([]);
-
   useEffect(() => {
-    import('../services/api').then(({ productsApi }) => {
-      productsApi.getAllProducts().then(res => setProducts(res.data)).catch(console.error);
-    });
+    productsApi.getAllProducts()
+      .then(res => setProducts(res.data))
+      .catch(console.error);
+
+    warehouseApi.getAvailable()
+      .then(res => {
+        if (res.data?.length > 0) setDefaultWarehouseId(res.data[0].id);
+      })
+      .catch(console.error);
   }, []);
+
+  const handleQuickAdd = (product) => {
+    if (!product?.id) return;
+    if (!defaultWarehouseId) {
+      toast.error('No warehouse available for fulfillment');
+      return;
+    }
+    addToCart(product, defaultWarehouseId);
+    toast.success(`${product.name} added to cart`);
+  };
 
   const heroText = "FLOWSTOCK".split('');
 
@@ -36,9 +54,9 @@ export default function WelcomePage() {
       <header className="welcome-header animate-reveal" style={{animationDelay: '0.5s'}}>
         <Link to="/" className="logo">-FLOWSTOCK</Link>
         <nav className="nav-pill">
-          <Link to="/">Inventory</Link>
-          <Link to="/">Warehouses</Link>
-          <Link to="/">Operations</Link>
+          <Link to="/inventory">Inventory</Link>
+          <Link to="/warehouses">Warehouses</Link>
+          <Link to="/orders">Orders</Link>
           <Link to="/login">Sign In</Link>
         </nav>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
@@ -101,7 +119,14 @@ export default function WelcomePage() {
                 <img src="/olive_branch.png" alt={item.name || "Product"} className="product-img" style={{padding: '2rem', objectFit: 'contain'}} />
                 <div className="product-overlay flex-col items-center">
                   {item.name && <h3 className="anton text-2xl text-white mb-4 text-center">{item.name}</h3>}
-                  <button className="quick-add-btn label-text">Quick Add</button>
+                  <button
+                    type="button"
+                    className="quick-add-btn label-text"
+                    onClick={() => handleQuickAdd(item)}
+                    disabled={!item.id}
+                  >
+                    Quick Add
+                  </button>
                 </div>
               </div>
             ))}
@@ -119,9 +144,9 @@ export default function WelcomePage() {
             </div>
             <div className="footer-right">
               <div className="footer-links label-text">
-                <Link to="/">Inventory</Link>
-                <Link to="/">Warehouses</Link>
-                <Link to="/">Operations</Link>
+                <Link to="/inventory">Inventory</Link>
+                <Link to="/warehouses">Warehouses</Link>
+                <Link to="/orders">Orders</Link>
               </div>
               <div className="footer-links label-text">
                 <Link to="/">Instagram</Link>

@@ -13,6 +13,7 @@ export function AuthProvider({ children }) {
       const { data } = await authApi.login({ email, password });
       const { accessToken, user: userData } = data.data;
       sessionStorage.setItem('access_token', accessToken);
+      if (userData?.id) sessionStorage.setItem('user_id', userData.id);
       setUser(userData);
     } finally {
       setIsLoading(false);
@@ -27,6 +28,7 @@ export function AuthProvider({ children }) {
       // ignore errors — still clear local state
     } finally {
       sessionStorage.removeItem('access_token');
+      sessionStorage.removeItem('user_id');
       setUser(null);
       setIsLoading(false);
     }
@@ -34,6 +36,7 @@ export function AuthProvider({ children }) {
 
   const setUserFromToken = useCallback((token, userData) => {
     sessionStorage.setItem('access_token', token);
+    if (userData?.id) sessionStorage.setItem('user_id', userData.id);
     setUser(userData);
   }, []);
 

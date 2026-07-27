@@ -23,23 +23,37 @@ import ManagerPanel from './pages/dashboards/ManagerPanel';
 import UserPanel from './pages/dashboards/UserPanel';
 
 function ProtectedRoute({ children }) {
-  const { isAuthenticated, user, setUserFromToken } = useAuth();
+  const { user, setUserFromToken } = useAuth();
   const token = sessionStorage.getItem('access_token');
+  const [isResolving, setIsResolving] = React.useState(!!token && !user);
 
   useEffect(() => {
     if (token && !user) {
+      setIsResolving(true);
       authApi.getProfile()
         .then(({ data }) => {
           setUserFromToken(token, data.data);
         })
         .catch(() => {
           sessionStorage.removeItem('access_token');
-        });
+          sessionStorage.removeItem('user_id');
+        })
+        .finally(() => setIsResolving(false));
+    } else {
+      setIsResolving(false);
     }
   }, [token, user, setUserFromToken]);
 
   if (!token) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (isResolving) {
+    return (
+      <div className="min-h-screen bg-brand-950 flex items-center justify-center">
+        <div className="w-10 h-10 border-4 border-brand-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
   }
 
   return <>{children}</>;

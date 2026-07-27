@@ -9,10 +9,12 @@ export const api = axios.create({
   timeout: 10000,
 });
 
-// ── Request interceptor: attach access token ──────────────────────────────────
+// ── Request interceptor: attach access token and user id ─────────────────────
 api.interceptors.request.use((config) => {
   const token = sessionStorage.getItem('access_token');
   if (token) config.headers.Authorization = `Bearer ${token}`;
+  const userId = sessionStorage.getItem('user_id');
+  if (userId) config.headers['X-User-Id'] = userId;
   return config;
 });
 
@@ -50,6 +52,7 @@ api.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError, null);
         sessionStorage.removeItem('access_token');
+        sessionStorage.removeItem('user_id');
         window.location.href = '/login';
         return Promise.reject(refreshError);
       } finally {
