@@ -89,17 +89,17 @@ export default function WelcomePage() {
           ))}
         </h1>
 
-        <img src="/sage_leaves.png" alt="Organic sage leaves" className="floating-image float-img-1 parallax" data-speed="0.05" />
-        <img src="/olive_branch.png" alt="Olive branch" className="floating-image float-img-2 parallax" data-speed="0.08" />
-        <img src="/matcha_powder.png" alt="Matcha powder" className="floating-image float-img-3 parallax" data-speed="0.03" />
+        <img src="/walmart_box.png" alt="Shipping Box" className="floating-image float-img-1 parallax" data-speed="0.05" />
+        <img src="/walmart_cart.png" alt="Shopping Cart" className="floating-image float-img-2 parallax" data-speed="0.08" />
+        <img src="/barcode_scanner.png" alt="Barcode Scanner" className="floating-image float-img-3 parallax" data-speed="0.03" />
 
         <div className="hero-bottom animate-reveal" style={{animationDelay: '0.8s'}}>
           <p className="hero-desc">
-            An earthy, high-end editorial style combining bold industrial typography with soft organic colors. Streamline stock, movement, and delivery through one dependable workspace.
+            A high-end retail supply chain platform combining bold industrial typography with dependable logistics. Streamline stock, movement, and delivery for massive retail hubs in one workspace.
           </p>
           <div style={{textAlign: 'right'}}>
-            <p className="label-text">Origin</p>
-            <p className="anton" style={{fontSize: '2rem'}}>NATURE</p>
+            <p className="label-text">Scale</p>
+            <p className="anton" style={{fontSize: '2rem'}}>RETAIL</p>
           </div>
         </div>
       </section>
@@ -116,7 +116,7 @@ export default function WelcomePage() {
           <div className="product-grid">
             {(products.length > 0 ? products.slice(0, 3) : [1, 2, 3]).map((item) => (
               <div key={item.id || item} className="product-card">
-                <img src="/olive_branch.png" alt={item.name || "Product"} className="product-img" style={{padding: '2rem', objectFit: 'contain'}} />
+                <img src="/walmart_box.png" alt={item.name || "Product"} className="product-img" style={{padding: '2rem', objectFit: 'contain'}} />
                 <div className="product-overlay flex-col items-center">
                   {item.name && <h3 className="anton text-2xl text-white mb-4 text-center">{item.name}</h3>}
                   <button

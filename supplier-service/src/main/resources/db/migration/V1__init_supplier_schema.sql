@@ -44,6 +44,6 @@ CREATE INDEX idx_purchase_orders_status   ON supplier.purchase_orders(status);
 -- Seed suppliers
 INSERT INTO supplier.suppliers (id, code, name, contact_person, email, phone, city, country, status)
 VALUES
-    ('sup-001', 'SUP-TATA', 'Tata Consumer Products', 'Rajesh Sharma', 'rajesh@tata.com', '+91-9876543210', 'Mumbai', 'India', 'ACTIVE'),
-    ('sup-002', 'SUP-ITC', 'ITC Limited', 'Priya Nair', 'priya.nair@itc.in', '+91-9123456789', 'Kolkata', 'India', 'ACTIVE'),
-    ('sup-003', 'SUP-HUL', 'Hindustan Unilever Ltd', 'Arjun Mehta', 'arjun@hul.com', '+91-9988776655', 'Mumbai', 'India', 'ACTIVE');
+    ('sup-001', 'SUP-PG', 'Procter & Gamble', 'Jon Moeller', 'contact@pg.com', '+1-800-331-3774', 'Cincinnati', 'USA', 'ACTIVE'),
+    ('sup-002', 'SUP-FRITO', 'Frito-Lay', 'Steven Williams', 'contact@fritolay.com', '+1-800-352-4477', 'Plano', 'USA', 'ACTIVE'),
+    ('sup-003', 'SUP-KC', 'Kimberly-Clark', 'Mike Hsu', 'contact@kimberly-clark.com', '+1-888-525-8388', 'Dallas', 'USA', 'ACTIVE');

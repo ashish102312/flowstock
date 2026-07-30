@@ -41,6 +41,6 @@ CREATE INDEX idx_warehouses_country ON warehouse.warehouses(country);
 -- Seed data
 INSERT INTO warehouse.warehouses (id, code, name, description, address_line1, city, state, country, postal_code, latitude, longitude, total_capacity, status)
 VALUES
-    ('wh-001', 'WH-DELHI-001', 'Delhi North Hub', 'Primary fulfillment hub for North India', 'Plot 45, Industrial Area', 'New Delhi', 'Delhi', 'India', '110001', 28.6139, 77.2090, 10000, 'ACTIVE'),
-    ('wh-002', 'WH-MUMBAI-001', 'Mumbai West Depot', 'Western India distribution center', 'Unit 12, Andheri Kurla Road', 'Mumbai', 'Maharashtra', 'India', '400059', 19.0760, 72.8777, 8000, 'ACTIVE'),
-    ('wh-003', 'WH-BENGALURU-001', 'Bengaluru Tech Park Warehouse', 'South India returns and dispatch hub', 'Survey 88, Whitefield', 'Bengaluru', 'Karnataka', 'India', '560066', 12.9716, 77.5946, 6000, 'ACTIVE');
+    ('wh-001', 'WH-WM-6022', 'Walmart DC 6022 (Delhi)', 'Primary fulfillment hub for North Region', 'Plot 45, Industrial Area', 'New Delhi', 'Delhi', 'India', '110001', 28.6139, 77.2090, 100000, 'ACTIVE'),
+    ('wh-002', 'WH-WM-6023', 'Walmart DC 6023 (Mumbai)', 'Western Region distribution center', 'Unit 12, Andheri Kurla Road', 'Mumbai', 'Maharashtra', 'India', '400059', 19.0760, 72.8777, 80000, 'ACTIVE'),
+    ('wh-003', 'WH-WM-6024', 'Walmart DC 6024 (Bengaluru)', 'South Region returns and dispatch hub', 'Survey 88, Whitefield', 'Bengaluru', 'Karnataka', 'India', '560066', 12.9716, 77.5946, 60000, 'ACTIVE');
