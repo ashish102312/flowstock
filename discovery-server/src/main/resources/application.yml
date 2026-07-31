@@ -1,15 +1,43 @@
 server:
   port: 8761
+  servlet:
+    context-path: /
 
 spring:
   application:
-    name: discovery-server
+    name: discovery-service
+  profiles:
+    active: default
 
 eureka:
+  client:
+    # This application is the Eureka server, it MUST NOT try to register with itself
+    register-with-eureka: false
+    # Server should not try to fetch registry from other servers
+    fetch-registry: false
+
   instance:
     hostname: localhost
-  client:
-    register-with-eureka: false
-    fetch-registry: false
-    service-url:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
+  server:
+    enable-self-preservation: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud: INFO
+    com.flowstock: DEBUG
+
+info:
+  app:
+    name: FlowStock - Discovery Service
+    version: 0.0.1-SNAPSHOT
