@@ -42,7 +42,7 @@ export default function LoginPage() {
     <div className="welcome-page" style={{ minHeight: '100vh', background: 'var(--color-cream)' }}>
       {/* Header */}
       <header className="welcome-header">
-        <Link to="/" className="logo">-FLOWSTOCK</Link>
+        <Link to="/" className="logo">FLOWSTOCK</Link>
         <nav className="nav-pill">
           <Link to="/">Inventory</Link>
           <Link to="/">Warehouses</Link>

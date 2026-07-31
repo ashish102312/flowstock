@@ -38,7 +38,7 @@ export default function OrdersPage() {
   return (
     <div className="welcome-page" style={{ minHeight: '100vh', background: 'var(--color-cream)' }}>
       <header className="welcome-header">
-        <Link to="/" className="logo">-FLOWSTOCK</Link>
+        <Link to="/" className="logo">FLOWSTOCK</Link>
         <nav className="nav-pill">
           <Link to="/">Home</Link>
           <Link to="/warehouses">Warehouses</Link>
@@ -49,26 +49,19 @@ export default function OrdersPage() {
         <Link to="/login" className="cart-btn label-text">Sign In</Link>
       </header>
 
-      <section style={{
-        background: 'var(--color-sage)',
-        padding: '10rem 4rem 4rem 4rem',
-        borderBottomLeftRadius: '5rem',
-        borderBottomRightRadius: '5rem',
-        textAlign: 'center',
-        boxShadow: '0 25px 50px rgba(1,71,46,0.2)',
-      }}>
-        <p className="label-text" style={{ marginBottom: '1rem', opacity: 0.7, color: 'var(--color-forest)' }}>
+      <section className="hero-header-section">
+        <p className="label-text" style={{ marginBottom: '1rem', opacity: 0.7 }}>
           ORDER HISTORY
         </p>
-        <h1 className="anton" style={{ fontSize: '8vw', lineHeight: 0.85, margin: '0 0 1.5rem 0', color: 'var(--color-forest)' }}>
+        <h1 className="anton" style={{ fontSize: '8vw', lineHeight: 0.85, margin: '0 0 1.5rem 0' }}>
           MY ORDERS
         </h1>
-        <p style={{ maxWidth: '500px', margin: '0 auto', opacity: 0.8, color: 'var(--color-forest)' }}>
+        <p style={{ maxWidth: '500px', margin: '0 auto', opacity: 0.8 }}>
           Track your purchases, view saga orchestration states, and monitor order fulfillment.
         </p>
       </section>
 
-      <section style={{ padding: '5rem 4rem', maxWidth: '1000px', margin: '0 auto' }}>
+      <section className="content-section">
         {loading ? (
           <div style={{ textAlign: 'center', padding: '4rem' }}><p className="label-text">LOADING ORDERS...</p></div>
         ) : orders.length === 0 ? (

@@ -62,7 +62,7 @@ export default function WarehousePage() {
     <div className="welcome-page" style={{ minHeight: '100vh', background: 'var(--color-cream)' }}>
       {/* Header */}
       <header className="welcome-header">
-        <Link to="/" className="logo">-FLOWSTOCK</Link>
+        <Link to="/" className="logo">FLOWSTOCK</Link>
         <nav className="nav-pill">
           <Link to="/">Home</Link>
           <Link to="/warehouses">Warehouses</Link>
@@ -73,14 +73,7 @@ export default function WarehousePage() {
       </header>
 
       {/* Hero Banner */}
-      <section style={{
-        background: 'var(--color-sage)',
-        padding: '10rem 4rem 4rem 4rem',
-        borderBottomLeftRadius: '5rem',
-        borderBottomRightRadius: '5rem',
-        textAlign: 'center',
-        boxShadow: '0 25px 50px -12px rgba(1,71,46,0.2)',
-      }}>
+      <section className="hero-header-section">
         <p className="label-text" style={{ marginBottom: '1rem', opacity: 0.7 }}>
           WAREHOUSE NETWORK
         </p>
@@ -111,8 +104,8 @@ export default function WarehousePage() {
         />
       </section>
 
-      {/* Warehouse Grid */}
-      <section style={{ padding: '6rem 4rem', maxWidth: '1300px', margin: '0 auto' }}>
+      {/* Content */}
+      <section className="content-section">
         {loading ? (
           <div style={{ textAlign: 'center', padding: '4rem' }}>
             <p className="label-text" style={{ opacity: 0.5 }}>LOADING WAREHOUSES...</p>
@@ -145,18 +138,23 @@ export default function WarehousePage() {
                   e.currentTarget.style.boxShadow = '0 20px 40px rgba(1,71,46,0.1)';
                 }}
               >
-                {/* Card Top */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
-                  <div style={{
-                    background: 'var(--color-sage)',
-                    borderRadius: '1rem',
-                    width: '50px', height: '50px',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '1.5rem',
-                  }}>
-                    🏭
+                {/* Cover Image */}
+                <div style={{
+                  height: '160px',
+                  margin: '-2rem -2rem 1.5rem -2rem',
+                  borderTopLeftRadius: '2.5rem',
+                  borderTopRightRadius: '2.5rem',
+                  overflow: 'hidden',
+                  position: 'relative'
+                }}>
+                  <img 
+                    src={`/warehouse_${((wh.id.charCodeAt(wh.id.length - 1) || 0) % 3) + 1}.png`} 
+                    alt="Warehouse" 
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                  />
+                  <div style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
+                    <StatusBadge status={wh.status} />
                   </div>
-                  <StatusBadge status={wh.status} />
                 </div>
 
                 {/* Name & Code */}
@@ -166,9 +164,23 @@ export default function WarehousePage() {
                 <p className="label-text" style={{ fontSize: '10px', opacity: 0.5, marginBottom: '1rem' }}>{wh.code}</p>
 
                 {/* Location */}
-                <p style={{ fontSize: '0.875rem', color: 'var(--color-forest)', opacity: 0.7, marginBottom: '1.5rem' }}>
-                  📍 {wh.city}, {wh.state}, {wh.country}
-                </p>
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <p style={{ fontSize: '0.875rem', color: 'var(--color-forest)', opacity: 0.8, marginBottom: '0.25rem', fontWeight: 'bold' }}>
+                    📍 {wh.city}, {wh.state} {wh.postalCode || wh.postal_code || ''}
+                  </p>
+                  <p className="label-text" style={{ fontSize: '9px', opacity: 0.6, display: 'flex', gap: '0.5rem' }}>
+                    <span>LAT: {wh.latitude?.toFixed(4) || 'N/A'}</span>
+                    <span>LNG: {wh.longitude?.toFixed(4) || 'N/A'}</span>
+                  </p>
+                </div>
+
+                {/* Capabilities / Raw Data */}
+                <div style={{ marginBottom: '1.5rem', borderLeft: '3px solid var(--color-moss)', paddingLeft: '0.75rem' }}>
+                  <p className="label-text" style={{ fontSize: '9px', opacity: 0.6, marginBottom: '0.25rem' }}>RAW DATA / SERVICES PROVIDED</p>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--color-forest)', opacity: 0.9, lineHeight: '1.5' }}>
+                    {wh.description || 'Standard Fulfillment Operations'}
+                  </p>
+                </div>
 
                 {/* Capacity */}
                 <div>

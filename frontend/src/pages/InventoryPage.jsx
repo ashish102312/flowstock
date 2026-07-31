@@ -44,7 +44,7 @@ export default function InventoryPage() {
   return (
     <div className="welcome-page" style={{ minHeight: '100vh', background: 'var(--color-cream)' }}>
       <header className="welcome-header">
-        <Link to="/" className="logo">-FLOWSTOCK</Link>
+        <Link to="/" className="logo">FLOWSTOCK</Link>
         <nav className="nav-pill">
           <Link to="/">Home</Link>
           <Link to="/warehouses">Warehouses</Link>
@@ -55,16 +55,8 @@ export default function InventoryPage() {
         <Link to="/login" className="cart-btn label-text">Sign In</Link>
       </header>
 
-      <section style={{
-        background: 'var(--color-forest)',
-        padding: '10rem 4rem 4rem 4rem',
-        borderBottomLeftRadius: '5rem',
-        borderBottomRightRadius: '5rem',
-        textAlign: 'center',
-        color: 'var(--color-cream)',
-        boxShadow: '0 25px 50px rgba(1,71,46,0.3)',
-      }}>
-        <p className="label-text" style={{ marginBottom: '1rem', opacity: 0.6, color: '#e65100' }}>
+      <section className="hero-header-section">
+        <p className="label-text" style={{ marginBottom: '1rem', opacity: 0.6, color: 'var(--color-olive)' }}>
           STOCK ALERTS
         </p>
         <h1 className="anton" style={{ fontSize: '9vw', lineHeight: 0.85, margin: '0 0 1.5rem 0', color: 'var(--color-olive)' }}>
@@ -75,7 +67,7 @@ export default function InventoryPage() {
         </p>
       </section>
 
-      <section style={{ padding: '5rem 4rem', maxWidth: '1200px', margin: '0 auto' }}>
+      <section className="content-section">
         <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h2 className="anton" style={{ fontSize: '3rem', margin: 0, color: 'var(--color-forest)' }}>
             LOW STOCK ({lowStock.length})
@@ -93,20 +85,20 @@ export default function InventoryPage() {
             {lowStock.map(item => (
               <div key={item.id} style={{
                 background: 'white',
-                border: '2px solid #ffccbc',
+                border: '1px solid rgba(1, 71, 46, 0.1)',
                 borderRadius: '2rem',
                 padding: '2rem',
-                boxShadow: '0 15px 30px rgba(230, 81, 0, 0.1)',
+                boxShadow: '0 15px 30px rgba(1, 71, 46, 0.08)',
                 position: 'relative',
                 overflow: 'hidden'
               }}>
                 <div style={{
-                  position: 'absolute', top: 0, left: 0, width: '100%', height: '4px', background: '#e65100'
+                  position: 'absolute', top: 0, left: 0, width: '100%', height: '4px', background: 'var(--color-forest)'
                 }} />
                 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                  <div style={{ background: '#fff3e0', padding: '0.5rem', borderRadius: '1rem', color: '#e65100' }}>⚠️</div>
-                  <span className="label-text" style={{ fontSize: '9px', background: '#ffe0b2', color: '#e65100', padding: '0.25rem 0.75rem', borderRadius: '2rem' }}>
+                  <div style={{ background: 'var(--color-olive)', padding: '0.5rem', borderRadius: '1rem', color: 'var(--color-forest)', fontSize: '1.2rem' }}>⚠️</div>
+                  <span className="label-text" style={{ fontSize: '9px', background: 'var(--color-forest)', color: 'var(--color-cream)', padding: '0.25rem 0.75rem', borderRadius: '2rem' }}>
                     BELOW THRESHOLD
                   </span>
                 </div>
@@ -121,7 +113,7 @@ export default function InventoryPage() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', background: '#fafafa', borderRadius: '1rem' }}>
                   <div style={{ textAlign: 'center' }}>
                     <p className="label-text" style={{ fontSize: '9px', opacity: 0.5, marginBottom: '0.2rem' }}>AVAILABLE</p>
-                    <p className="anton" style={{ fontSize: '1.5rem', color: '#d84315', margin: 0 }}>{item.availableQty}</p>
+                    <p className="anton" style={{ fontSize: '1.5rem', color: 'var(--color-forest)', margin: 0 }}>{item.availableQty}</p>
                   </div>
                   <div style={{ width: '1px', height: '30px', background: '#eee' }} />
                   <div style={{ textAlign: 'center' }}>

@@ -52,7 +52,7 @@ export default function WelcomePage() {
     <div className="welcome-page">
       {/* Header */}
       <header className="welcome-header animate-reveal" style={{animationDelay: '0.5s'}}>
-        <Link to="/" className="logo">-FLOWSTOCK</Link>
+        <Link to="/" className="logo">FLOWSTOCK</Link>
         <nav className="nav-pill">
           <Link to="/inventory">Inventory</Link>
           <Link to="/warehouses">Warehouses</Link>

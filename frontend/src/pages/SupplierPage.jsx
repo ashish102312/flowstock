@@ -4,15 +4,15 @@ import '../pages/WelcomePage.css';
 
 const SupplierStatusBadge = ({ status }) => {
   const colors = {
-    ACTIVE: { bg: '#e9edc9', text: '#01472e' },
-    INACTIVE: { bg: '#f5f5f5', text: '#888' },
-    BLACKLISTED: { bg: '#fce4ec', text: '#c62828' },
-    ON_HOLD: { bg: '#fff3e0', text: '#e65100' },
+    ACTIVE: { bg: 'var(--color-olive)', text: 'var(--color-forest)' },
+    INACTIVE: { bg: 'rgba(1,71,46,0.1)', text: 'rgba(1,71,46,0.6)' },
+    BLACKLISTED: { bg: 'var(--color-forest)', text: 'var(--color-cream)' },
+    ON_HOLD: { bg: 'var(--color-sage)', text: 'var(--color-forest)' },
   };
   const c = colors[status] || colors.ACTIVE;
   return (
     <span className="label-text" style={{
-      background: c.bg, color: c.text, padding: '0.25rem 0.75rem',
+      background: c.bg, color: c.text, border: c.border || 'none', padding: '0.25rem 0.75rem',
       borderRadius: '2rem', fontSize: '9px',
     }}>
       {status}
@@ -22,17 +22,17 @@ const SupplierStatusBadge = ({ status }) => {
 
 const OrderStatusBadge = ({ status }) => {
   const colors = {
-    DRAFT: { bg: '#f5f5f5', text: '#888' },
-    SUBMITTED: { bg: '#e3f2fd', text: '#1565c0' },
-    CONFIRMED: { bg: '#e8f5e9', text: '#2e7d32' },
-    DISPATCHED: { bg: '#fff3e0', text: '#e65100' },
-    RECEIVED: { bg: '#e9edc9', text: '#01472e' },
-    CANCELLED: { bg: '#fce4ec', text: '#c62828' },
+    DRAFT: { bg: 'rgba(1,71,46,0.05)', text: 'rgba(1,71,46,0.6)' },
+    SUBMITTED: { bg: 'var(--color-olive)', text: 'var(--color-forest)' },
+    CONFIRMED: { bg: 'var(--color-sage)', text: 'var(--color-forest)' },
+    DISPATCHED: { bg: 'var(--color-moss)', text: 'var(--color-cream)' },
+    RECEIVED: { bg: 'var(--color-forest)', text: 'var(--color-cream)' },
+    CANCELLED: { bg: 'transparent', text: 'var(--color-forest)', border: '1px solid var(--color-forest)' },
   };
   const c = colors[status] || colors.DRAFT;
   return (
     <span className="label-text" style={{
-      background: c.bg, color: c.text, padding: '0.25rem 0.75rem',
+      background: c.bg, color: c.text, border: c.border || 'none', padding: '0.25rem 0.75rem',
       borderRadius: '2rem', fontSize: '9px',
     }}>
       {status}
@@ -65,7 +65,7 @@ export default function SupplierPage() {
     <div className="welcome-page" style={{ minHeight: '100vh', background: 'var(--color-cream)' }}>
       {/* Header */}
       <header className="welcome-header">
-        <Link to="/" className="logo">-FLOWSTOCK</Link>
+        <Link to="/" className="logo">FLOWSTOCK</Link>
         <nav className="nav-pill">
           <Link to="/">Home</Link>
           <Link to="/warehouses">Warehouses</Link>
@@ -76,15 +76,7 @@ export default function SupplierPage() {
       </header>
 
       {/* Hero */}
-      <section style={{
-        background: 'var(--color-forest)',
-        padding: '10rem 4rem 4rem 4rem',
-        borderBottomLeftRadius: '5rem',
-        borderBottomRightRadius: '5rem',
-        textAlign: 'center',
-        color: 'var(--color-cream)',
-        boxShadow: '0 25px 50px rgba(1,71,46,0.3)',
-      }}>
+      <section className="hero-header-section">
         <p className="label-text" style={{ marginBottom: '1rem', opacity: 0.6 }}>
           SUPPLY CHAIN NETWORK
         </p>
@@ -115,7 +107,7 @@ export default function SupplierPage() {
       </section>
 
       {/* Content */}
-      <section style={{ padding: '5rem 4rem', maxWidth: '1300px', margin: '0 auto' }}>
+      <section className="content-section">
         {loading ? (
           <div style={{ textAlign: 'center', padding: '4rem' }}>
             <p className="label-text" style={{ opacity: 0.5 }}>LOADING DATA...</p>
@@ -139,17 +131,23 @@ export default function SupplierPage() {
                   onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-6px)'}
                   onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
-                    <div style={{
-                      background: 'var(--color-forest)',
-                      borderRadius: '1rem',
-                      width: '50px', height: '50px',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: '1.3rem',
-                    }}>
-                      🤝
+                  {/* Cover Image */}
+                  <div style={{
+                    height: '140px',
+                    margin: '-2rem -2rem 1.5rem -2rem',
+                    borderTopLeftRadius: '2.5rem',
+                    borderTopRightRadius: '2.5rem',
+                    overflow: 'hidden',
+                    position: 'relative'
+                  }}>
+                    <img 
+                      src={`/supplier_${((s.id.charCodeAt(s.id.length - 1) || 0) % 3) + 1}.png`} 
+                      alt="Supplier" 
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                    />
+                    <div style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
+                      <SupplierStatusBadge status={s.status} />
                     </div>
-                    <SupplierStatusBadge status={s.status} />
                   </div>
 
                   <h3 className="anton" style={{ fontSize: '1.3rem', margin: '0 0 0.25rem 0', color: 'var(--color-forest)' }}>

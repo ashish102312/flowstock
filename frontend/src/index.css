@@ -16,7 +16,9 @@
   }
 
   body {
-    @apply bg-brand-950 text-white font-sans;
+    @apply font-sans;
+    background-color: #fefae0;
+    color: #01472e;
     min-height: 100vh;
   }
 
