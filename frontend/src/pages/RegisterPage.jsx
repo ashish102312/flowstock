@@ -6,7 +6,6 @@ import { z } from 'zod';
 import { Eye, EyeOff, Loader2, Check } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { authApi } from '../services/api';
-import { useCart } from '../context/CartContext';
 import './WelcomePage.css';
 
 const schema = z.object({
@@ -38,7 +37,6 @@ const PasswordRule = ({ met, label }) => (
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { cartItems, setIsCartOpen } = useCart();
   const navigate = useNavigate();
 
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({
@@ -98,20 +96,7 @@ export default function RegisterPage() {
           <Link to="/">Operations</Link>
           <Link to="/dashboard">Dashboard</Link>
         </nav>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <button 
-            onClick={() => setIsCartOpen(true)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', position: 'relative' }}
-          >
-            🛒
-            {cartItems.length > 0 && (
-              <span style={{ position: 'absolute', top: '-5px', right: '-10px', background: 'var(--color-olive)', color: 'var(--color-forest)', fontSize: '10px', fontWeight: 'bold', width: '18px', height: '18px', borderRadius: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {cartItems.length}
-              </span>
-            )}
-          </button>
-          <Link to="/login" className="cart-btn label-text">Sign In</Link>
-        </div>
+        <Link to="/login" className="cart-btn label-text">Sign In</Link>
       </header>
 
       <section style={{

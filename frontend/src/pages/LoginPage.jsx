@@ -6,7 +6,6 @@ import { z } from 'zod';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
-import { useCart } from '../context/CartContext';
 import './WelcomePage.css';
 
 const schema = z.object({
@@ -17,7 +16,6 @@ const schema = z.object({
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const { login, isLoading } = useAuth();
-  const { cartItems, setIsCartOpen } = useCart();
   const navigate = useNavigate();
 
   const { register, handleSubmit, formState: { errors } } = useForm({
@@ -51,20 +49,7 @@ export default function LoginPage() {
           <Link to="/">Operations</Link>
           <Link to="/dashboard">Dashboard</Link>
         </nav>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <button 
-            onClick={() => setIsCartOpen(true)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', position: 'relative' }}
-          >
-            🛒
-            {cartItems.length > 0 && (
-              <span style={{ position: 'absolute', top: '-5px', right: '-10px', background: 'var(--color-olive)', color: 'var(--color-forest)', fontSize: '10px', fontWeight: 'bold', width: '18px', height: '18px', borderRadius: '9px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {cartItems.length}
-              </span>
-            )}
-          </button>
-          <Link to="/register" className="cart-btn label-text">Register</Link>
-        </div>
+        <Link to="/register" className="cart-btn label-text">Register</Link>
       </header>
 
       {/* Main Content */}
