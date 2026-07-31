@@ -18,6 +18,17 @@ export default function WelcomePage() {
         const speed = el.dataset.speed || 0.05;
         el.style.transform = `translateY(${scrolled * speed}px)`;
       });
+
+      const logoEl = document.querySelector('.welcome-header .logo');
+      if (logoEl) {
+        if (scrolled > 50) {
+          logoEl.style.opacity = '0';
+          logoEl.style.pointerEvents = 'none';
+        } else {
+          logoEl.style.opacity = '1';
+          logoEl.style.pointerEvents = 'auto';
+        }
+      }
     };
     
     window.addEventListener('scroll', handleScroll);
@@ -57,7 +68,6 @@ export default function WelcomePage() {
           <Link to="/inventory">Inventory</Link>
           <Link to="/warehouses">Warehouses</Link>
           <Link to="/orders">Orders</Link>
-          <Link to="/login">Sign In</Link>
         </nav>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <button 
