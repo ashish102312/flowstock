@@ -114,22 +114,45 @@ export default function WelcomePage() {
             </Link>
           </div>
           <div className="product-grid">
-            {(products.length > 0 ? products.slice(0, 3) : [1, 2, 3]).map((item) => (
-              <div key={item.id || item} className="product-card">
-                <img src="/walmart_box.png" alt={item.name || "Product"} className="product-img" style={{padding: '2rem', objectFit: 'contain'}} />
-                <div className="product-overlay flex-col items-center">
-                  {item.name && <h3 className="anton text-2xl text-white mb-4 text-center">{item.name}</h3>}
-                  <button
-                    type="button"
-                    className="quick-add-btn label-text"
-                    onClick={() => handleQuickAdd(item)}
-                    disabled={!item.id}
-                  >
-                    Quick Add
-                  </button>
+            {(products.length > 0 ? products.slice(0, 3) : [1, 2, 3]).map((item, index) => {
+              const essentialImages = ['/smartwatch.png', '/headphones.png', '/smartspeaker.png'];
+              const essentialDescriptions = [
+                'Track your active lifestyle with high-precision health monitoring.',
+                'Immerse yourself in pure sound with hybrid noise-canceling technology.',
+                'Voice-controlled, rich 360-degree acoustic performance for any room.'
+              ];
+              return (
+                <div key={item.id || item} className="product-card">
+                  <img 
+                    src={essentialImages[index % essentialImages.length]} 
+                    alt={item.name || "Product"} 
+                    className="product-img" 
+                    style={{padding: '2rem', objectFit: 'contain'}} 
+                  />
+                  <div className="product-overlay flex flex-col items-center justify-center text-center p-6" style={{ alignContent: 'center' }}>
+                    {item.name ? (
+                      <h3 className="anton text-2xl text-white mb-2">{item.name}</h3>
+                    ) : (
+                      <h3 className="anton text-2xl text-white mb-2">
+                        {index === 0 ? 'Smart Watch' : index === 1 ? 'Headphones' : 'Smart Speaker'}
+                      </h3>
+                    )}
+                    <p className="text-white/90 text-sm mb-4 max-w-[220px] font-medium leading-relaxed">
+                      {essentialDescriptions[index % essentialDescriptions.length]}
+                    </p>
+                    <button
+                      type="button"
+                      className="quick-add-btn label-text"
+                      onClick={() => handleQuickAdd(item)}
+                      disabled={!item.id}
+                      style={{ transform: 'none', margin: '0' }}
+                    >
+                      Quick Add
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
