@@ -81,3 +81,4 @@ docker-compose.override.yml
 .docker/
 postgres_data/
 redis_data/
+.superdesign

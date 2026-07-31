@@ -1,39 +1,19 @@
 server:
-  port: 8086
+  port: 8085
 
 spring:
   application:
     name: order-service
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:flowstock}
-    username: ${DB_USERNAME:ashishbhardwaj}
-    password: ${DB_PASSWORD:wareflow_dev}
+    url: jdbc:postgresql://localhost:5432/order_db
+    username: wareflow
+    password: wareflow_password
   jpa:
     hibernate:
-      ddl-auto: validate
-    show-sql: false
-    properties:
-      hibernate:
-        format_sql: true
-        default_schema: orders
-  flyway:
-    enabled: true
-    baseline-on-migrate: true
-    schemas: orders
-    locations: classpath:db/migration
+      ddl-auto: update
+    show-sql: true
 
 eureka:
   client:
-    serviceUrl:
-      defaultZone: http://${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}/eureka/
-  instance:
-    prefer-ip-address: true
-
-# Feign Client configuration
-feign:
-  client:
-    config:
-      default:
-        connectTimeout: 5000
-        readTimeout: 5000
-        loggerLevel: basic
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

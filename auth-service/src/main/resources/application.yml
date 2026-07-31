@@ -1,119 +1,26 @@
+server:
+  port: 8081
+
 spring:
   application:
     name: auth-service
-
-  # ── Database ─────────────────────────────────────────────────────────────────
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:flowstock}
-    username: ${DB_USERNAME:ashishbhardwaj}
-    password: ${DB_PASSWORD:}
-    driver-class-name: org.postgresql.Driver
-    hikari:
-      connection-timeout: 20000
-      maximum-pool-size: 10
-      minimum-idle: 5
-      idle-timeout: 300000
-      pool-name: FlowStockAuthPool
-
-  # ── JPA ──────────────────────────────────────────────────────────────────────
+    url: jdbc:postgresql://localhost:5432/auth_db
+    username: wareflow
+    password: wareflow_password
   jpa:
     hibernate:
-      ddl-auto: validate          # Flyway owns DDL — never let Hibernate modify schema
-    show-sql: false
+      ddl-auto: update
+    show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-        default_schema: public
 
-  # ── Flyway ───────────────────────────────────────────────────────────────────
-  flyway:
-    enabled: true
-    locations: classpath:db/migration
-    baseline-on-migrate: false
-    out-of-order: false
-    validate-on-migrate: true
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
 
-  # ── Redis ────────────────────────────────────────────────────────────────────
-  data:
-    redis:
-      host: ${REDIS_HOST:localhost}
-      port: ${REDIS_PORT:6379}
-      password: ${REDIS_PASSWORD:}
-      timeout: 2000ms
-      lettuce:
-        pool:
-          max-active: 8
-          max-idle: 8
-          min-idle: 0
-
-  # ── Mail (MailHog for dev, real SMTP for prod) ────────────────────────────────
-  mail:
-    host: ${MAIL_HOST:localhost}
-    port: ${MAIL_PORT:1025}
-    username: ${MAIL_USERNAME:}
-    password: ${MAIL_PASSWORD:}
-    properties:
-      mail:
-        smtp:
-          auth: false
-          starttls:
-            enable: false
-
-  # ── OAuth2 ───────────────────────────────────────────────────────────────────
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: ${GOOGLE_CLIENT_ID:REPLACE_ME}
-            client-secret: ${GOOGLE_CLIENT_SECRET:REPLACE_ME}
-            scope:
-              - email
-              - profile
-            redirect-uri: "{baseUrl}/login/oauth2/code/google"
-
-# ── Server ───────────────────────────────────────────────────────────────────
-server:
-  port: ${SERVER_PORT:8081}
-  servlet:
-    context-path: /
-  error:
-    include-message: never       # Never expose internal messages in error responses
-    include-stacktrace: never
-    include-exception: false
-
-# ── Application Custom Config ─────────────────────────────────────────────────
-application:
-  jwt:
-    secret-key: ${JWT_SECRET_KEY:bXlTdXBlclNlY3JldEtleVRoYXRJc0F0TGVhc3Q2NENoYXJhY3RlcnNMb25nRm9yU2VjdXJpdHk=}
-    access-token-expiration: ${JWT_ACCESS_EXPIRY:900}         # 15 minutes
-    refresh-token-expiration: ${JWT_REFRESH_EXPIRY:2592000}   # 30 days
-    issuer: wareflow-auth-service
-
-  frontend-url: ${FRONTEND_URL:http://localhost:3000}
-  max-login-attempts: ${MAX_LOGIN_ATTEMPTS:5}
-
-  cookie:
-    secure: ${COOKIE_SECURE:false}   # Set to true in production (requires HTTPS)
-    domain: ${COOKIE_DOMAIN:localhost}
-
-# ── OpenAPI / Swagger ─────────────────────────────────────────────────────────
-springdoc:
-  api-docs:
-    path: /v3/api-docs
-  swagger-ui:
-    path: /swagger-ui.html
-    operations-sorter: method
-    tags-sorter: alpha
-    try-it-out-enabled: true
-    filter: true
-
-# ── Logging ───────────────────────────────────────────────────────────────────
-logging:
-  level:
-    com.wareflow.auth: DEBUG
-    org.springframework.security: INFO
-    org.hibernate.SQL: WARN
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+jwt:
+  secret: ${JWT_SECRET:bXlTdXBlclNlY3JldEtleVRoYXRJc0F0TGVhc3Q2NENoYXJhY3RlcnNMb25nRm9yU2VjdXJpdHk=}
+  expiration: 86400000
