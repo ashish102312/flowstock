@@ -52,7 +52,7 @@ export default function WelcomePage() {
     <div className="welcome-page">
       {/* Header */}
       <header className="welcome-header animate-reveal" style={{animationDelay: '0.5s'}}>
-        <Link to="/" className="logo">-FLOWSTOCK</Link>
+        <Link to="/" className="logo">FLOWSTOCK</Link>
         <nav className="nav-pill">
           <Link to="/inventory">Inventory</Link>
           <Link to="/warehouses">Warehouses</Link>
@@ -136,11 +136,10 @@ export default function WelcomePage() {
 
       {/* Footer */}
       <footer className="footer-section">
-        <div className="footer-container">
-          <div className="footer-grid">
+        <div className="footer-container text-forest-override">
+          <div className="footer-grid" style={{ marginBottom: '2rem' }}>
             <div className="footer-left">
               <h3 className="newsletter-title anton">STAY CONNECTED</h3>
-              <input type="email" placeholder="ENTER YOUR EMAIL" className="newsletter-input label-text" />
             </div>
             <div className="footer-right">
               <div className="footer-links label-text">
@@ -155,9 +154,19 @@ export default function WelcomePage() {
               </div>
             </div>
           </div>
-          <div className="footer-bottom label-text">
-            <span>© 2026 FLOWSTOCK</span>
-            <span>TERMS & PRIVACY</span>
+          <div className="footer-grid" style={{ marginBottom: '3rem' }}>
+            <div className="footer-left">
+              <input type="email" placeholder="ENTER YOUR EMAIL" className="newsletter-input input-forest-override label-text" />
+            </div>
+          </div>
+        </div>
+
+        <div className="footer-green-zone">
+          <div className="footer-container">
+            <div className="footer-bottom label-text" style={{ borderTop: 'none', paddingTop: '0' }}>
+              <span>© 2026 FLOWSTOCK</span>
+              <span>TERMS & PRIVACY</span>
+            </div>
           </div>
         </div>
       </footer>

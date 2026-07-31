@@ -1,12 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;700&display=swap');
 
 .welcome-page {
-  --color-forest: #01472e;
-  --color-sage: #ccd5ae;
-  --color-olive: #e9edc9;
-  --color-cream: #fefae0;
-  --color-moss: #a3b18a;
-
   font-family: 'Inter', sans-serif;
   color: var(--color-forest);
   background-color: var(--color-cream);
@@ -56,9 +50,28 @@
 .welcome-header .logo {
   font-family: 'Anton', sans-serif;
   font-size: 2rem;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.02em;
   text-decoration: none;
   color: var(--color-forest);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.welcome-header .logo::before {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background-color: var(--color-forest);
+  border-radius: 3px;
+  transform: rotate(45deg); /* Styled diamond block */
+}
+
+.welcome-header .logo:hover {
+  transform: scale(1.02);
+  opacity: 0.9;
 }
 
 .welcome-header .nav-pill {
@@ -69,19 +82,36 @@
   padding: 0.75rem 2rem;
   display: flex;
   gap: 2rem;
+  align-items: center;
 }
 
 .welcome-header .nav-pill a {
   text-decoration: none;
   color: var(--color-forest);
-  transition: opacity 0.2s;
   font-weight: 700;
   font-size: 10px;
   text-transform: uppercase;
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), margin 0.25s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.25s;
+  transform-origin: center;
 }
 
+/* Hovered element scales up significantly */
 .welcome-header .nav-pill a:hover {
-  opacity: 0.7;
+  transform: scale(2.0);
+  opacity: 1;
+  margin: 0 1.75rem;
+}
+
+/* Sibling elements scale up moderately */
+.welcome-header .nav-pill a:hover + a {
+  transform: scale(1.5);
+  margin-left: 0.75rem;
+}
+
+.welcome-header .nav-pill a:has(+ a:hover) {
+  transform: scale(1.5);
+  margin-right: 0.75rem;
 }
 
 .welcome-header .cart-btn {
@@ -295,19 +325,40 @@
 
 /* Footer */
 .footer-section {
-  background-color: var(--color-forest);
-  color: var(--color-sage);
-  padding: 6rem 4rem 2rem 4rem;
-  border-top-left-radius: 5rem;
-  border-top-right-radius: 5rem;
+  padding: 6rem 0 0 0;
   margin-top: -5rem;
   position: relative;
   z-index: 3;
 }
 
+.text-forest-override {
+  color: var(--color-forest);
+}
+
+.text-forest-override a {
+  color: var(--color-forest) !important;
+}
+
+.footer-green-zone {
+  background-color: var(--color-forest);
+  color: var(--color-sage);
+  padding: 1.5rem 0;
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+}
+
+.input-forest-override {
+  border-bottom: 1px solid var(--color-forest) !important;
+  color: var(--color-forest) !important;
+}
+.input-forest-override::placeholder {
+  color: rgba(1, 71, 46, 0.5) !important;
+}
+
 .footer-container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 4rem;
 }
 
 .footer-grid {

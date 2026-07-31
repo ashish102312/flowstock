@@ -79,7 +79,7 @@ export default function CartDrawer() {
           )}
         </div>
 
-        <div style={{ padding: '2rem', borderTop: '1px solid rgba(1,71,46,0.1)', background: 'white' }}>
+        <div style={{ padding: '2rem', borderTop: '1px solid rgba(1,71,46,0.1)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
             <span className="label-text">TOTAL ESTIMATE</span>
             <span className="anton" style={{ fontSize: '1.5rem', color: 'var(--color-forest)' }}>₹{totalAmount.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
@@ -88,7 +88,7 @@ export default function CartDrawer() {
             onClick={handleCheckout}
             disabled={cartItems.length === 0}
             className="cart-btn" 
-            style={{ width: '100%', justifyContent: 'center', background: cartItems.length === 0 ? '#ccc' : 'var(--color-forest)', color: cartItems.length === 0 ? '#666' : 'white' }}
+            style={{ width: '100%', justifyContent: 'center', background: cartItems.length === 0 ? 'rgba(1,71,46,0.1)' : 'var(--color-forest)', color: cartItems.length === 0 ? 'rgba(1,71,46,0.5)' : 'white' }}
           >
             {cartItems.length === 0 ? 'CART EMPTY' : 'SECURE CHECKOUT'}
           </button>

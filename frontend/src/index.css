@@ -4,6 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-forest: #01472e;
+  --color-sage: #ccd5ae;
+  --color-olive: #e9edc9;
+  --color-cream: #fefae0;
+  --color-moss: #a3b18a;
+}
+
 @layer base {
   * {
     box-sizing: border-box;
@@ -16,17 +24,18 @@
   }
 
   body {
-    @apply bg-brand-950 text-white font-sans;
+    @apply font-sans;
+    background-color: #fefae0;
+    color: #01472e;
     min-height: 100vh;
   }
 
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0px 1000px #1e1b4b inset !important;
-    -webkit-text-fill-color: #ffffff !important;
-    caret-color: #ffffff;
-    border-color: #4f46e5 !important;
+    -webkit-box-shadow: 0 0 0px 1000px #fefae0 inset !important;
+    -webkit-text-fill-color: #01472e !important;
+    caret-color: #01472e;
   }
 }
 

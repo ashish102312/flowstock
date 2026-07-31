@@ -107,7 +107,7 @@ function Dashboard() {
     <div className="welcome-page" style={{ minHeight: '100vh', background: 'var(--color-cream)' }}>
       {/* Navbar */}
       <header className="welcome-header" style={{ position: 'relative', background: 'white', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
-        <Link to="/" className="logo">-FLOWSTOCK</Link>
+        <Link to="/" className="logo">FLOWSTOCK</Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
           <span className="label-text" style={{ opacity: 0.5 }}>{user?.email}</span>
           <button onClick={handleLogout} className="cart-btn label-text" style={{ cursor: 'pointer', border: 'none' }}>

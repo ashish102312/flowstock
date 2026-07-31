@@ -89,7 +89,7 @@ export default function RegisterPage() {
   return (
     <div className="welcome-page" style={{ minHeight: '100vh', background: 'var(--color-cream)' }}>
       <header className="welcome-header">
-        <Link to="/" className="logo">-FLOWSTOCK</Link>
+        <Link to="/" className="logo">FLOWSTOCK</Link>
         <nav className="nav-pill">
           <Link to="/">Inventory</Link>
           <Link to="/">Warehouses</Link>
@@ -126,12 +126,12 @@ export default function RegisterPage() {
             <div style={{ display: 'flex', gap: '1rem' }}>
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <label htmlFor="firstName" className="label-text">First Name</label>
-                <input id="firstName" placeholder="Ashish" {...register('firstName')} style={inputStyle(errors.firstName)} />
+                <input id="firstName" placeholder="First Name" {...register('firstName')} style={inputStyle(errors.firstName)} />
                 {errors.firstName && <p className="label-text" style={{ color: '#e65100', fontSize: '9px' }}>{errors.firstName.message}</p>}
               </div>
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <label htmlFor="lastName" className="label-text">Last Name</label>
-                <input id="lastName" placeholder="Bhardwaj" {...register('lastName')} style={inputStyle(errors.lastName)} />
+                <input id="lastName" placeholder="Last Name" {...register('lastName')} style={inputStyle(errors.lastName)} />
                 {errors.lastName && <p className="label-text" style={{ color: '#e65100', fontSize: '9px' }}>{errors.lastName.message}</p>}
               </div>
             </div>
