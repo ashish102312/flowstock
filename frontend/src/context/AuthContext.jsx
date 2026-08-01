@@ -11,8 +11,19 @@ export function AuthProvider({ children }) {
     setIsLoading(true);
     try {
       const { data } = await authApi.login({ email, password });
-      const { accessToken, user: userData } = data.data;
-      sessionStorage.setItem('access_token', accessToken);
+      // Support both API shapes: { data: { accessToken, user } } (expected)
+      // and legacy flat response { token, userId, email, roles }.
+      let accessToken, userData;
+      if (data?.data) {
+        accessToken = data.data.accessToken;
+        userData = data.data.user;
+      } else if (data?.token) {
+        accessToken = data.token;
+        userData = { id: data.userId, email: data.email, roles: data.roles };
+      }
+      if (accessToken) {
+        sessionStorage.setItem('access_token', accessToken);
+      }
       if (userData?.id) sessionStorage.setItem('user_id', userData.id);
       setUser(userData);
     } finally {
