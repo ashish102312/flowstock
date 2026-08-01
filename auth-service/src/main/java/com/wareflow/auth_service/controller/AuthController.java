@@ -17,12 +17,26 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(authService.register(request));
+    public ResponseEntity<Object> register(@Valid @RequestBody RegisterRequest request) {
+        AuthResponse resp = authService.register(request);
+        var user = java.util.Map.of(
+                "id", resp.getUserId(),
+                "email", resp.getEmail(),
+                "roles", resp.getRoles()
+        );
+        var body = java.util.Map.of("data", java.util.Map.of("accessToken", resp.getToken(), "user", user));
+        return ResponseEntity.ok(body);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request) {
-        return ResponseEntity.ok(authService.login(request));
+    public ResponseEntity<Object> login(@Valid @RequestBody AuthRequest request) {
+        AuthResponse resp = authService.login(request);
+        var user = java.util.Map.of(
+                "id", resp.getUserId(),
+                "email", resp.getEmail(),
+                "roles", resp.getRoles()
+        );
+        var body = java.util.Map.of("data", java.util.Map.of("accessToken", resp.getToken(), "user", user));
+        return ResponseEntity.ok(body);
     }
 }
