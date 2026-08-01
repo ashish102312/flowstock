@@ -9,7 +9,6 @@ import com.wareflow.auth_service.repository.RoleRepository;
 import com.wareflow.auth_service.repository.UserRepository;
 import com.wareflow.auth_service.security.CustomUserDetails;
 import com.wareflow.auth_service.security.JwtUtil;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +18,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
@@ -27,6 +25,18 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
+
+    public AuthServiceImpl(UserRepository userRepository,
+                           RoleRepository roleRepository,
+                           PasswordEncoder passwordEncoder,
+                           JwtUtil jwtUtil,
+                           AuthenticationManager authenticationManager) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
+        this.authenticationManager = authenticationManager;
+    }
 
     @Override
     public AuthResponse register(RegisterRequest request) {
@@ -52,12 +62,12 @@ public class AuthServiceImpl implements AuthService {
         CustomUserDetails userDetails = new CustomUserDetails(savedUser);
         String jwtToken = jwtUtil.generateToken(userDetails);
 
-        return AuthResponse.builder()
-                .token(jwtToken)
-                .userId(savedUser.getId())
-                .email(savedUser.getEmail())
-                .roles(savedUser.getRoles().stream().map(Role::getName).collect(Collectors.toSet()))
-                .build();
+        return new AuthResponse(
+                jwtToken,
+                savedUser.getId(),
+                savedUser.getEmail(),
+                savedUser.getRoles().stream().map(Role::getName).collect(Collectors.toSet())
+        );
     }
 
     @Override
@@ -75,11 +85,11 @@ public class AuthServiceImpl implements AuthService {
         CustomUserDetails userDetails = new CustomUserDetails(user);
         String jwtToken = jwtUtil.generateToken(userDetails);
 
-        return AuthResponse.builder()
-                .token(jwtToken)
-                .userId(user.getId())
-                .email(user.getEmail())
-                .roles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()))
-                .build();
+        return new AuthResponse(
+                jwtToken,
+                user.getId(),
+                user.getEmail(),
+                user.getRoles().stream().map(Role::getName).collect(Collectors.toSet())
+        );
     }
 }

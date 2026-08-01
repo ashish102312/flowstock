@@ -2,7 +2,6 @@ package com.wareflow.inventory_service.service;
 
 import com.wareflow.inventory_service.entity.Inventory;
 import com.wareflow.inventory_service.repository.InventoryRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,10 +9,13 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 public class InventoryService {
 
     private final InventoryRepository repository;
+
+    public InventoryService(InventoryRepository repository) {
+        this.repository = repository;
+    }
 
     public List<Inventory> getAllInventory() {
         return repository.findAll();
@@ -21,6 +23,10 @@ public class InventoryService {
 
     public List<Inventory> getInventoryByProduct(UUID productId) {
         return repository.findByProductId(productId);
+    }
+
+    public List<Inventory> getInventoryByWarehouse(UUID warehouseId) {
+        return repository.findByWarehouseId(warehouseId);
     }
 
     @Transactional

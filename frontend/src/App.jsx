@@ -120,9 +120,9 @@ function Dashboard() {
       <main style={{ padding: '4rem 2rem', maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
         
         {/* Dynamic Role Dashboard */}
-        {user?.roles?.includes('ROLE_ADMIN') || user?.roles?.includes('ROLE_SUPER_ADMIN') ? (
+        {user?.roles?.includes('ROLE_ADMIN') || user?.roles?.includes('ADMIN') || user?.roles?.includes('ROLE_SUPER_ADMIN') || user?.roles?.includes('SUPER_ADMIN') ? (
           <AdminPanel user={user} />
-        ) : user?.roles?.includes('ROLE_MANAGER') ? (
+        ) : user?.roles?.includes('ROLE_MANAGER') || user?.roles?.includes('MANAGER') ? (
           <ManagerPanel user={user} />
         ) : (
           <UserPanel user={user} />

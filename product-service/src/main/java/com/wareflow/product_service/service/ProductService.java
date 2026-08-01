@@ -2,17 +2,19 @@ package com.wareflow.product_service.service;
 
 import com.wareflow.product_service.entity.Product;
 import com.wareflow.product_service.repository.ProductRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository repository;
+
+    public ProductService(ProductRepository repository) {
+        this.repository = repository;
+    }
 
     public List<Product> getAllProducts() {
         return repository.findAll();
