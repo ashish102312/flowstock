@@ -18,6 +18,13 @@ spring:
         format_sql: true
 
 eureka:
+  instance:
+    prefer-ip-address: false
+    hostname: localhost
+    ip-address: 127.0.0.1
+    non-secure-port: 8081
+    secure-port-enabled: false
+    instance-id: ${spring.application.name}:${server.port}
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
