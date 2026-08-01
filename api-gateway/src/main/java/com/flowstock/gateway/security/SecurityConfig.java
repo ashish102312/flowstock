@@ -26,7 +26,7 @@ public class SecurityConfig {
                 .cors().and()
                 .csrf().disable()
                 .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers("/api/auth/**").permitAll()
+                        .pathMatchers("/api/auth/**", "/api/v1/auth/**").permitAll()
                         .pathMatchers("/actuator/**", "/eureka/**", "/actuator/health", "/actuator/info").permitAll()
                         // TODO: switch to authenticated() to enable JWT enforcement
                         .anyExchange().permitAll()
