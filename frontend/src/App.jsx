@@ -105,77 +105,15 @@ function Dashboard() {
     navigate('/login');
   };
 
+  if (user?.roles?.includes('ROLE_ADMIN') || user?.roles?.includes('ADMIN') || user?.roles?.includes('ROLE_SUPER_ADMIN') || user?.roles?.includes('SUPER_ADMIN')) {
+    return <AdminPanel user={user} onLogout={handleLogout} />;
+  }
+
   if (user?.roles?.includes('ROLE_MANAGER') || user?.roles?.includes('MANAGER')) {
     return <ManagerPanel user={user} onLogout={handleLogout} />;
   }
 
-  return (
-    <div className="welcome-page" style={{ minHeight: '100vh', background: 'var(--color-cream)' }}>
-      {/* Navbar */}
-      <header className="welcome-header" style={{ position: 'relative', background: 'white', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
-        <Link to="/" className="logo">FLOWSTOCK</Link>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-          <span className="label-text" style={{ opacity: 0.5 }}>{user?.email}</span>
-          <button onClick={handleLogout} className="cart-btn label-text" style={{ cursor: 'pointer', border: 'none' }}>
-            SIGN OUT
-          </button>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main style={{ padding: '4rem 2rem', maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
-        
-        {/* Dynamic Role Dashboard */}
-        {user?.roles?.includes('ROLE_ADMIN') || user?.roles?.includes('ADMIN') || user?.roles?.includes('ROLE_SUPER_ADMIN') || user?.roles?.includes('SUPER_ADMIN') ? (
-          <AdminPanel user={user} />
-        ) : (
-          <UserPanel user={user} />
-        )}
-
-        <div style={{
-          background: 'white',
-          padding: '3rem',
-          borderRadius: '3rem',
-          boxShadow: '0 25px 50px -12px rgba(1, 71, 46, 0.05)',
-          marginTop: '3rem'
-        }}>
-          <div>
-            <h1 className="anton" style={{ fontSize: '2.5rem', color: 'var(--color-forest)', margin: '0 0 0.5rem 0' }}>
-              WELCOME BACK, {user?.firstName?.toUpperCase() || 'USER'}!
-            </h1>
-            <p style={{ opacity: 0.6, fontSize: '0.9rem' }}>You have successfully authenticated to the FlowStock platform.</p>
-          </div>
-
-          <div style={{ borderTop: '2px solid var(--color-olive)', marginTop: '2rem', paddingTop: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1rem', borderBottom: '1px solid var(--color-olive)' }}>
-              <span className="label-text" style={{ opacity: 0.5 }}>FULL NAME</span>
-              <span style={{ fontWeight: 'bold' }}>{user?.firstName} {user?.lastName}</span>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1rem', borderBottom: '1px solid var(--color-olive)' }}>
-              <span className="label-text" style={{ opacity: 0.5 }}>EMAIL ADDRESS</span>
-              <span style={{ fontWeight: 'bold' }}>{user?.email}</span>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1rem', borderBottom: '1px solid var(--color-olive)' }}>
-              <span className="label-text" style={{ opacity: 0.5 }}>ROLES</span>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
-                {user?.roles?.map(role => (
-                  <span key={role} className="label-text" style={{ background: 'var(--color-olive)', color: 'var(--color-forest)', padding: '0.25rem 0.75rem', borderRadius: '1rem' }}>
-                    {role}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span className="label-text" style={{ opacity: 0.5 }}>EMAIL VERIFIED</span>
-              <span style={{ fontWeight: 'bold', color: user?.emailVerified ? 'var(--color-forest)' : '#e65100' }}>
-                {user?.emailVerified ? 'YES' : 'NO'}
-              </span>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
-  );
+  return <UserPanel user={user} onLogout={handleLogout} />;
 }
 
 export default function App() {
