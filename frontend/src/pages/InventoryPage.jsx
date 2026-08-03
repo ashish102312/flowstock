@@ -1,49 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import '../pages/WelcomePage.css';
-import { toast } from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
+import { useInventory } from '../context/InventoryContext';
 
 export default function InventoryPage() {
-  const [lowStock, setLowStock] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
+  const { inventory, loading } = useInventory();
 
-  useEffect(() => {
-    import('../services/api').then(({ inventoryApi, productsApi, warehouseApi }) => {
-      // Fetch low stock items and map their product/warehouse details
-      inventoryApi.getLowStock()
-        .then(async (res) => {
-          const items = res.data;
-          
-          // Hydrate with names
-          const hydrated = await Promise.all(items.map(async (item) => {
-            try {
-              const [pRes, wRes] = await Promise.all([
-                productsApi.getProductById(item.productId),
-                warehouseApi.getWarehouseById(item.warehouseId)
-              ]);
-              return {
-                ...item,
-                productName: pRes.data.name,
-                warehouseName: wRes.data.name
-              };
-            } catch (e) {
-              return { ...item, productName: item.productId, warehouseName: item.warehouseId };
-            }
-          }));
-          
-          setLowStock(hydrated);
-        })
-        .catch(err => {
-          console.error(err);
-          toast.error("Failed to load inventory data");
-        })
-        .finally(() => setLoading(false));
-    });
-  }, []);
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  const displayName = user?.firstName || user?.name || user?.username || (user?.email ? user.email.split('@')[0] : 'Manager');
+
+  // Filter the global inventory state down to just low stock items (< 50)
+  const lowStock = inventory.filter(item => (item.availableQty ?? item.quantity ?? 0) < 50);
 
   return (
     <div className="welcome-page" style={{ minHeight: '100vh', background: 'var(--color-cream)' }}>
-      <header className="welcome-header">
+      <header className="welcome-header light-mode">
         <Link to="/" className="logo">FLOWSTOCK</Link>
         <nav className="nav-pill">
           <Link to="/">Home</Link>
@@ -52,7 +28,9 @@ export default function InventoryPage() {
           <Link to="/inventory">Inventory</Link>
           <Link to="/dashboard">Dashboard</Link>
         </nav>
-        <Link to="/login" className="cart-btn label-text">Sign In</Link>
+        <div className="cart-btn label-text" style={{ background: 'transparent', color: 'var(--color-forest)', border: 'none' }}>
+          {displayName.toUpperCase()}
+        </div>
       </header>
 
       <section style={{
@@ -65,13 +43,13 @@ export default function InventoryPage() {
         boxShadow: '0 25px 50px rgba(1,71,46,0.3)',
       }}>
         <p className="label-text" style={{ marginBottom: '1rem', opacity: 0.6, color: '#e65100' }}>
-          STOCK ALERTS
+          RESTRICTED ACCESS • ZONE ASSIGNED TO {displayName.toUpperCase()}
         </p>
         <h1 className="anton" style={{ fontSize: '9vw', lineHeight: 0.85, margin: '0 0 1.5rem 0', color: 'var(--color-olive)' }}>
           INVENTORY WATCH
         </h1>
         <p style={{ maxWidth: '500px', margin: '0 auto', opacity: 0.8 }}>
-          Real-time distributed stock monitor. Prevents overselling across fulfillment hubs using Redis locking.
+          Real-time distributed stock monitor dynamically filtered for your manager profile. Prevents overselling across fulfillment hubs.
         </p>
       </section>
 
@@ -112,10 +90,10 @@ export default function InventoryPage() {
                 </div>
 
                 <h3 className="anton" style={{ fontSize: '1.4rem', color: 'var(--color-forest)', margin: '0 0 0.5rem 0' }}>
-                  {item.productName}
+                  {item.productName || item.name}
                 </h3>
                 <p className="label-text" style={{ fontSize: '10px', opacity: 0.5, marginBottom: '1.5rem' }}>
-                  AT {item.warehouseName.toUpperCase()}
+                  AT {(item.warehouseName || item.warehouseId || '').toUpperCase()}
                 </p>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', background: '#fafafa', borderRadius: '1rem' }}>
@@ -140,14 +118,7 @@ export default function InventoryPage() {
         )}
       </section>
 
-      <footer className="footer-section">
-        <div className="footer-container">
-          <div className="footer-bottom label-text">
-            <span>© 2026 FLOWSTOCK</span>
-            <span>DISTRIBUTED INVENTORY SERVICE</span>
-          </div>
-        </div>
-      </footer>
+
     </div>
   );
 }

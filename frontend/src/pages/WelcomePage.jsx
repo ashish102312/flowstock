@@ -4,6 +4,7 @@ import { useCart } from '../context/CartContext';
 import { productsApi, warehouseApi } from '../services/api';
 import toast from 'react-hot-toast';
 import './WelcomePage.css';
+import AboutSection from '../components/AboutSection';
 
 export default function WelcomePage() {
   const { cartItems, setIsCartOpen, addToCart } = useCart();
@@ -99,7 +100,6 @@ export default function WelcomePage() {
           ))}
         </h1>
 
-        <img src="/walmart_box.png" alt="Shipping Box" className="floating-image float-img-1 parallax" data-speed="0.05" />
         <img src="/walmart_cart.png" alt="Shopping Cart" className="floating-image float-img-2 parallax" data-speed="0.08" />
         <img src="/barcode_scanner.png" alt="Barcode Scanner" className="floating-image float-img-3 parallax" data-speed="0.03" />
 
@@ -166,42 +166,7 @@ export default function WelcomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="footer-section">
-        <div className="footer-container text-forest-override">
-          <div className="footer-grid" style={{ marginBottom: '2rem' }}>
-            <div className="footer-left">
-              <h3 className="newsletter-title anton">STAY CONNECTED</h3>
-            </div>
-            <div className="footer-right">
-              <div className="footer-links label-text">
-                <Link to="/inventory">Inventory</Link>
-                <Link to="/warehouses">Warehouses</Link>
-                <Link to="/orders">Orders</Link>
-              </div>
-              <div className="footer-links label-text">
-                <Link to="/">Instagram</Link>
-                <Link to="/">Twitter</Link>
-                <Link to="/">Pinterest</Link>
-              </div>
-            </div>
-          </div>
-          <div className="footer-grid" style={{ marginBottom: '3rem' }}>
-            <div className="footer-left">
-              <input type="email" placeholder="ENTER YOUR EMAIL" className="newsletter-input input-forest-override label-text" />
-            </div>
-          </div>
-        </div>
-
-        <div className="footer-green-zone">
-          <div className="footer-container">
-            <div className="footer-bottom label-text" style={{ borderTop: 'none', paddingTop: '0' }}>
-              <span>© 2026 FLOWSTOCK</span>
-              <span>TERMS & PRIVACY</span>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <AboutSection />
     </div>
   );
 }

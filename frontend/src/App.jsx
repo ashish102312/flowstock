@@ -16,11 +16,13 @@ import { CartProvider } from './context/CartContext';
 import CartDrawer from './components/CartDrawer';
 import { authApi } from './services/api';
 import toast from 'react-hot-toast';
+import Footer from './components/Footer';
 import './pages/WelcomePage.css';
 
 import AdminPanel from './pages/dashboards/AdminPanel';
 import ManagerPanel from './pages/dashboards/ManagerPanel';
 import UserPanel from './pages/dashboards/UserPanel';
+import { InventoryProvider } from './context/InventoryContext';
 
 function ProtectedRoute({ children }) {
   const { user, setUserFromToken } = useAuth();
@@ -103,6 +105,10 @@ function Dashboard() {
     navigate('/login');
   };
 
+  if (user?.roles?.includes('ROLE_MANAGER') || user?.roles?.includes('MANAGER')) {
+    return <ManagerPanel user={user} onLogout={handleLogout} />;
+  }
+
   return (
     <div className="welcome-page" style={{ minHeight: '100vh', background: 'var(--color-cream)' }}>
       {/* Navbar */}
@@ -122,8 +128,6 @@ function Dashboard() {
         {/* Dynamic Role Dashboard */}
         {user?.roles?.includes('ROLE_ADMIN') || user?.roles?.includes('ADMIN') || user?.roles?.includes('ROLE_SUPER_ADMIN') || user?.roles?.includes('SUPER_ADMIN') ? (
           <AdminPanel user={user} />
-        ) : user?.roles?.includes('ROLE_MANAGER') || user?.roles?.includes('MANAGER') ? (
-          <ManagerPanel user={user} />
         ) : (
           <UserPanel user={user} />
         )}
@@ -178,33 +182,40 @@ export default function App() {
   return (
     <CartProvider>
       <AuthProvider>
-        <BrowserRouter>
-          <Toaster position="top-right" toastOptions={{
-            className: 'label-text',
-            style: { background: 'var(--color-forest)', color: 'var(--color-cream)', borderRadius: '1rem', padding: '1rem' },
-            duration: 4000,
-          }} />
-          <CartDrawer />
-          <Routes>
-            <Route path="/" element={<WelcomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-            <Route path="/reset-password" element={<ResetPasswordPage />} />
-            <Route path="/verify-email" element={<VerifyEmailPage />} />
-            <Route path="/oauth2/callback" element={<OAuth2Callback />} />
-            <Route path="/warehouses" element={<WarehousePage />} />
-            <Route path="/suppliers" element={<SupplierPage />} />
-            <Route path="/inventory" element={<InventoryPage />} />
-            <Route path="/orders" element={<OrdersPage />} />
-            <Route path="/dashboard" element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            } />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </BrowserRouter>
+        <InventoryProvider>
+          <BrowserRouter>
+            <Toaster position="top-right" toastOptions={{
+              className: 'label-text',
+              style: { background: 'var(--color-forest)', color: 'var(--color-cream)', borderRadius: '1rem', padding: '1rem' },
+              duration: 4000,
+            }} />
+            <CartDrawer />
+            <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+              <div style={{ flex: 1 }}>
+                <Routes>
+                  <Route path="/" element={<WelcomePage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/register" element={<RegisterPage />} />
+                  <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                  <Route path="/reset-password" element={<ResetPasswordPage />} />
+                  <Route path="/verify-email" element={<VerifyEmailPage />} />
+                  <Route path="/oauth2/callback" element={<OAuth2Callback />} />
+                  <Route path="/warehouses" element={<WarehousePage />} />
+                  <Route path="/suppliers" element={<SupplierPage />} />
+                  <Route path="/inventory" element={<InventoryPage />} />
+                  <Route path="/orders" element={<OrdersPage />} />
+                  <Route path="/dashboard" element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </div>
+              <Footer />
+            </div>
+          </BrowserRouter>
+        </InventoryProvider>
       </AuthProvider>
     </CartProvider>
   );

@@ -126,7 +126,6 @@ export const productsApi = {
   createProduct: (data) => api.post('/products', data),
 };
 
-// ── Inventory API calls ────────────────────────────────────────────────────────
 export const inventoryApi = {
   getInventoryByProduct: (productId) => api.get(`/inventory/product/${productId}`),
   getInventoryByWarehouse: (warehouseId) => api.get(`/inventory/warehouse/${warehouseId}`),
@@ -134,6 +133,9 @@ export const inventoryApi = {
   getLowStock: () => api.get('/inventory/low-stock'),
   getAuditLog: (productId) => api.get(`/inventory/audit/${productId}`),
   initialize: (data) => api.post('/inventory/initialize', data),
+  addStock: (productId, warehouseId, quantity) => api.post(`/inventory/add?productId=${productId}&warehouseId=${warehouseId}&quantity=${quantity}`),
+  updateInventory: (id, quantity) => api.put(`/inventory/${id}?quantity=${quantity}`),
+  deleteInventory: (id) => api.delete(`/inventory/${id}`),
   adjustStock: (id, data) => api.post(`/inventory/${id}/adjust`, data),
   reserveStock: (id, data) => api.post(`/inventory/${id}/reserve`, data),
 };

@@ -53,4 +53,17 @@ public class InventoryController {
             @RequestParam int quantity) {
         return ResponseEntity.ok(service.reserveStock(productId, warehouseId, quantity));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Inventory> updateStock(
+            @PathVariable UUID id,
+            @RequestParam int quantity) {
+        return ResponseEntity.ok(service.updateInventory(id, quantity));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteStock(@PathVariable UUID id) {
+        service.deleteInventory(id);
+        return ResponseEntity.ok().build();
+    }
 }

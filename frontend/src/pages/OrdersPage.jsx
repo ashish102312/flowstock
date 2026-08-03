@@ -128,14 +128,7 @@ export default function OrdersPage() {
         )}
       </section>
 
-      <footer className="footer-section">
-        <div className="footer-container">
-          <div className="footer-bottom label-text">
-            <span>© 2026 FLOWSTOCK</span>
-            <span>ORDER MANAGEMENT SYSTEM</span>
-          </div>
-        </div>
-      </footer>
+
     </div>
   );
 }

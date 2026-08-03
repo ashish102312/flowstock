@@ -57,4 +57,17 @@ public class InventoryService {
         }
         return false;
     }
+
+    @Transactional
+    public Inventory updateInventory(UUID id, int quantity) {
+        Inventory inventory = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Inventory not found"));
+        inventory.setQuantity(quantity);
+        return repository.save(inventory);
+    }
+
+    @Transactional
+    public void deleteInventory(UUID id) {
+        repository.deleteById(id);
+    }
 }

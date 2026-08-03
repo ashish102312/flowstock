@@ -206,15 +206,7 @@ export default function WarehousePage() {
         )}
       </section>
 
-      {/* Footer */}
-      <footer className="footer-section">
-        <div className="footer-container">
-          <div className="footer-bottom label-text">
-            <span>© 2026 FLOWSTOCK</span>
-            <span>WAREHOUSE MANAGEMENT SYSTEM</span>
-          </div>
-        </div>
-      </footer>
+
     </div>
   );
 }

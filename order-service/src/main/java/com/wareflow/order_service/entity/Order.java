@@ -35,5 +35,6 @@ public class Order {
     private List<OrderItem> items;
 
     @Column(nullable = false, updatable = false)
+    @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 }
