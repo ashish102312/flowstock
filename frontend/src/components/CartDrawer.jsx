@@ -57,11 +57,49 @@ export default function CartDrawer() {
 
         <div style={{ flex: 1, overflowY: 'auto', padding: '2rem' }}>
           {cartItems.length === 0 ? (
-            <p className="label-text" style={{ textAlign: 'center', opacity: 0.5 }}>CART IS EMPTY</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <div style={{ textAlign: 'center', padding: '1rem 0' }}>
+                <p className="label-text" style={{ opacity: 0.5 }}>CART IS CURRENTLY EMPTY</p>
+              </div>
+              
+              <div>
+                <h3 className="anton" style={{ color: 'var(--color-forest)', marginBottom: '1.5rem', fontSize: '1.2rem' }}>RECOMMENDED FOR YOU</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  
+                  {/* Demo Card 1 */}
+                  <div style={{ display: 'flex', gap: '1rem', background: 'white', padding: '1rem', borderRadius: '1rem', boxShadow: '0 4px 12px rgba(1,71,46,0.05)' }}>
+                    <div style={{ width: '80px', height: '80px', backgroundColor: '#d8dec4', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+                      <img src="/smartwatch.png" alt="Smart Watch" style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'multiply' }} />
+                    </div>
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                      <p className="anton" style={{ margin: 0, color: 'var(--color-forest)', fontSize: '1.1rem' }}>PRO SMART WATCH</p>
+                      <p className="label-text" style={{ fontSize: '9px', opacity: 0.5, marginTop: '0.2rem' }}>IN STOCK - WAREHOUSE A</p>
+                      <p style={{ color: 'var(--color-forest)', margin: '0.5rem 0 0 0', fontWeight: 'bold' }}>₹12,499.00</p>
+                    </div>
+                  </div>
+
+                  {/* Demo Card 2 */}
+                  <div style={{ display: 'flex', gap: '1rem', background: 'white', padding: '1rem', borderRadius: '1rem', boxShadow: '0 4px 12px rgba(1,71,46,0.05)' }}>
+                    <div style={{ width: '80px', height: '80px', backgroundColor: '#d8dec4', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+                      <img src="/headphones.png" alt="Headphones" style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'multiply' }} />
+                    </div>
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                      <p className="anton" style={{ margin: 0, color: 'var(--color-forest)', fontSize: '1.1rem' }}>NOISE CANCEL HEADPHONES</p>
+                      <p className="label-text" style={{ fontSize: '9px', opacity: 0.5, marginTop: '0.2rem' }}>IN STOCK - WAREHOUSE B</p>
+                      <p style={{ color: 'var(--color-forest)', margin: '0.5rem 0 0 0', fontWeight: 'bold' }}>₹8,999.00</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               {cartItems.map((item, idx) => (
                 <div key={idx} style={{ display: 'flex', gap: '1rem', alignItems: 'center', background: 'white', padding: '1rem', borderRadius: '1rem', boxShadow: '0 4px 12px rgba(1,71,46,0.05)' }}>
+                  <div style={{ width: '60px', height: '60px', backgroundColor: '#d8dec4', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+                    <img src={idx % 3 === 0 ? "/smartwatch.png" : (idx % 3 === 1 ? "/headphones.png" : "/smartspeaker.png")} alt="Product" style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'multiply' }} />
+                  </div>
                   <div style={{ flex: 1 }}>
                     <p className="anton" style={{ margin: 0, color: 'var(--color-forest)', fontSize: '1.1rem' }}>{item.name}</p>
                     <p className="label-text" style={{ fontSize: '9px', opacity: 0.5, marginTop: '0.2rem' }}>FROM: {item.warehouseId}</p>
