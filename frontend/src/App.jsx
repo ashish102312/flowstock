@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useNavigate, useSearchParams, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useSearchParams, Link, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import WelcomePage from './pages/WelcomePage';
@@ -23,6 +23,18 @@ import AdminPanel from './pages/dashboards/AdminPanel';
 import ManagerPanel from './pages/dashboards/ManagerPanel';
 import UserPanel from './pages/dashboards/UserPanel';
 import { InventoryProvider } from './context/InventoryContext';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }, [pathname]);
+  return null;
+}
 
 function ProtectedRoute({ children }) {
   const { user, setUserFromToken } = useAuth();
@@ -122,6 +134,7 @@ export default function App() {
       <AuthProvider>
         <InventoryProvider>
           <BrowserRouter>
+            <ScrollToTop />
             <Toaster position="top-right" toastOptions={{
               className: 'label-text',
               style: { background: 'var(--color-forest)', color: 'var(--color-cream)', borderRadius: '1rem', padding: '1rem' },

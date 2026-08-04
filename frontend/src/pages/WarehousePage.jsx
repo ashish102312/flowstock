@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import '../pages/WelcomePage.css';
 
 const UtilizationBar = ({ percent }) => (
@@ -40,6 +41,7 @@ const StatusBadge = ({ status }) => {
 };
 
 export default function WarehousePage() {
+  const { isAuthenticated } = useAuth();
   const [warehouses, setWarehouses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -69,7 +71,11 @@ export default function WarehousePage() {
           <Link to="/suppliers">Suppliers</Link>
           <Link to="/dashboard">Dashboard</Link>
         </nav>
-        <Link to="/login" className="cart-btn label-text">Sign In</Link>
+        {isAuthenticated ? (
+          <Link to="/dashboard" className="cart-btn label-text">Dashboard</Link>
+        ) : (
+          <Link to="/login" className="cart-btn label-text">Sign In</Link>
+        )}
       </header>
 
       {/* Hero Banner */}

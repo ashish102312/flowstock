@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import { productsApi, warehouseApi } from '../services/api';
 import toast from 'react-hot-toast';
 import './WelcomePage.css';
@@ -8,6 +9,8 @@ import AboutSection from '../components/AboutSection';
 
 export default function WelcomePage() {
   const { cartItems, setIsCartOpen, addToCart } = useCart();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [defaultWarehouseId, setDefaultWarehouseId] = useState(null);
 
@@ -49,6 +52,11 @@ export default function WelcomePage() {
   }, []);
 
   const handleQuickAdd = (product) => {
+    if (!isAuthenticated) {
+      toast.error('Please sign in to add items to cart');
+      navigate('/login');
+      return;
+    }
     if (!product?.id) return;
     if (!defaultWarehouseId) {
       toast.error('No warehouse available for fulfillment');
@@ -82,7 +90,11 @@ export default function WelcomePage() {
               </span>
             )}
           </button>
-          <Link to="/login" className="cart-btn label-text">Sign In</Link>
+          {isAuthenticated ? (
+            <Link to="/dashboard" className="cart-btn label-text">Dashboard</Link>
+          ) : (
+            <Link to="/login" className="cart-btn label-text">Sign In</Link>
+          )}
         </div>
       </header>
 

@@ -1,9 +1,32 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import './Footer.css';
 
 export default function Footer() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleAboutClick = (e) => {
+    e.preventDefault();
+    if (location.pathname === '/') {
+      const aboutEl = document.getElementById('about');
+      if (aboutEl) {
+        aboutEl.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    } else {
+      navigate('/');
+      setTimeout(() => {
+        const aboutEl = document.getElementById('about');
+        if (aboutEl) {
+          aboutEl.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  };
+
   return (
     <footer className="global-footer">
       <div className="global-footer-container">
@@ -25,7 +48,7 @@ export default function Footer() {
 
           <div className="global-footer-links-group">
             <h3 className="label-text">Company</h3>
-            <Link to="/">About Us</Link>
+            <a href="#" onClick={handleAboutClick}>About Us</a>
             <Link to="/">Careers</Link>
             <a 
               href="#" 

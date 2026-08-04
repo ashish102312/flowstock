@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../pages/WelcomePage.css';
 import { orderApi } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 const OrderStatusBadge = ({ status }) => {
   const colors = {
@@ -25,6 +26,7 @@ const OrderStatusBadge = ({ status }) => {
 };
 
 export default function OrdersPage() {
+  const { isAuthenticated } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -46,7 +48,11 @@ export default function OrdersPage() {
           <Link to="/inventory">Inventory</Link>
           <Link to="/orders">My Orders</Link>
         </nav>
-        <Link to="/login" className="cart-btn label-text">Sign In</Link>
+        {isAuthenticated ? (
+          <Link to="/dashboard" className="cart-btn label-text">Dashboard</Link>
+        ) : (
+          <Link to="/login" className="cart-btn label-text">Sign In</Link>
+        )}
       </header>
 
       <section style={{

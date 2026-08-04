@@ -1,12 +1,25 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { orderApi } from '../services/api';
 import toast from 'react-hot-toast';
 
 export default function CartDrawer() {
-  const { cartItems, isCartOpen, setIsCartOpen, removeFromCart, updateQuantity, totalAmount, clearCart } = useCart();
+  const { cartItems, isCartOpen, setIsCartOpen, removeFromCart, updateQuantity, totalAmount, clearCart, addToCart } = useCart();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  const handleDemoAdd = (demoItem) => {
+    if (!isAuthenticated) {
+      toast.error('Please sign in to add items to cart');
+      setIsCartOpen(false);
+      navigate('/login');
+      return;
+    }
+    addToCart(demoItem, demoItem.warehouseId);
+    toast.success(`${demoItem.name} added to cart`);
+  };
 
   if (!isCartOpen) return null;
 
@@ -66,29 +79,29 @@ export default function CartDrawer() {
                 <h3 className="anton" style={{ color: 'var(--color-forest)', marginBottom: '1.5rem', fontSize: '1.2rem' }}>RECOMMENDED FOR YOU</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   
-                  {/* Demo Card 1 */}
-                  <div style={{ display: 'flex', gap: '1rem', background: 'white', padding: '1rem', borderRadius: '1rem', boxShadow: '0 4px 12px rgba(1,71,46,0.05)' }}>
-                    <div style={{ width: '80px', height: '80px', backgroundColor: '#d8dec4', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-                      <img src="/smartwatch.png" alt="Smart Watch" style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'multiply' }} />
+                  {[
+                    { productId: 'demo-1', name: 'PRO SMART WATCH', price: 12499.00, warehouseId: 'W-A', image: '/smartwatch.png' },
+                    { productId: 'demo-2', name: 'NOISE CANCEL HEADPHONES', price: 8999.00, warehouseId: 'W-B', image: '/headphones.png' },
+                    { productId: 'demo-3', name: '360 SMART SPEAKER', price: 5999.00, warehouseId: 'W-C', image: '/smartspeaker.png' },
+                    { productId: 'demo-4', name: 'INDUSTRIAL SCANNER', price: 14999.00, warehouseId: 'W-D', image: '/barcode_scanner.png' },
+                  ].map((demo, idx) => (
+                    <div key={idx} style={{ display: 'flex', gap: '1rem', background: 'white', padding: '1rem', borderRadius: '1rem', boxShadow: '0 4px 12px rgba(1,71,46,0.05)' }}>
+                      <div style={{ width: '60px', height: '60px', backgroundColor: '#d8dec4', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+                        <img src={demo.image} alt={demo.name} style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'multiply' }} />
+                      </div>
+                      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                        <p className="anton" style={{ margin: 0, color: 'var(--color-forest)', fontSize: '1.1rem' }}>{demo.name}</p>
+                        <p className="label-text" style={{ fontSize: '9px', opacity: 0.5, marginTop: '0.2rem' }}>IN STOCK - {demo.warehouseId}</p>
+                        <p style={{ color: 'var(--color-forest)', margin: '0.5rem 0 0 0', fontWeight: 'bold' }}>₹{demo.price.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
+                      </div>
+                      <button 
+                        onClick={() => handleDemoAdd(demo)}
+                        style={{ background: 'var(--color-olive)', border: 'none', borderRadius: '50%', width: '32px', height: '32px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-forest)', fontWeight: 'bold', alignSelf: 'center', fontSize: '1.2rem', transition: 'transform 0.2s' }}
+                      >
+                        +
+                      </button>
                     </div>
-                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                      <p className="anton" style={{ margin: 0, color: 'var(--color-forest)', fontSize: '1.1rem' }}>PRO SMART WATCH</p>
-                      <p className="label-text" style={{ fontSize: '9px', opacity: 0.5, marginTop: '0.2rem' }}>IN STOCK - WAREHOUSE A</p>
-                      <p style={{ color: 'var(--color-forest)', margin: '0.5rem 0 0 0', fontWeight: 'bold' }}>₹12,499.00</p>
-                    </div>
-                  </div>
-
-                  {/* Demo Card 2 */}
-                  <div style={{ display: 'flex', gap: '1rem', background: 'white', padding: '1rem', borderRadius: '1rem', boxShadow: '0 4px 12px rgba(1,71,46,0.05)' }}>
-                    <div style={{ width: '80px', height: '80px', backgroundColor: '#d8dec4', borderRadius: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-                      <img src="/headphones.png" alt="Headphones" style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'multiply' }} />
-                    </div>
-                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                      <p className="anton" style={{ margin: 0, color: 'var(--color-forest)', fontSize: '1.1rem' }}>NOISE CANCEL HEADPHONES</p>
-                      <p className="label-text" style={{ fontSize: '9px', opacity: 0.5, marginTop: '0.2rem' }}>IN STOCK - WAREHOUSE B</p>
-                      <p style={{ color: 'var(--color-forest)', margin: '0.5rem 0 0 0', fontWeight: 'bold' }}>₹8,999.00</p>
-                    </div>
-                  </div>
+                  ))}
 
                 </div>
               </div>

@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { Eye, EyeOff, Loader2, Check } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { authApi } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import './WelcomePage.css';
 
 const schema = z.object({
@@ -37,7 +38,14 @@ const PasswordRule = ({ met, label }) => (
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({
     resolver: zodResolver(schema),

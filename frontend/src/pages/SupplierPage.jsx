@@ -8,6 +8,7 @@ import {
   SlidersHorizontal, Check, AlertTriangle
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
 import '../pages/WelcomePage.css';
 
 // ── 12 REALISTIC ENTERPRISE SCM SUPPLIERS DATASET ──────────────────────────────
@@ -471,6 +472,7 @@ const MetricProgress = ({ label, val }) => {
 
 // ── MAIN SUPPLIERS ENTERPRISE SCM DASHBOARD COMPONENT ──────────────────────────
 export default function SupplierPage() {
+  const { isAuthenticated } = useAuth();
   const [activeTab, setActiveTab] = useState('suppliers');
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('ALL');
@@ -549,7 +551,11 @@ export default function SupplierPage() {
           <Link to="/inventory">Inventory</Link>
           <Link to="/dashboard">Dashboard</Link>
         </nav>
-        <Link to="/login" className="cart-btn label-text">Sign In</Link>
+        {isAuthenticated ? (
+          <Link to="/dashboard" className="cart-btn label-text">Dashboard</Link>
+        ) : (
+          <Link to="/login" className="cart-btn label-text">Sign In</Link>
+        )}
       </header>
 
       {/* ── HERO HERO BANNER ───────────────────────────────────────────────── */}
