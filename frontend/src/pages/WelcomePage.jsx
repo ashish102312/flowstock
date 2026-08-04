@@ -119,9 +119,13 @@ export default function WelcomePage() {
         <div className="feature-container">
           <div className="feature-header">
             <h2 className="feature-title anton">ESSENTIALS</h2>
-            <Link to="/register" className="cta-circle label-text">
-              View All
-            </Link>
+            <button 
+              onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })} 
+              className="cta-circle label-text" 
+              style={{ flexShrink: 0, border: 'none', cursor: 'pointer' }}
+            >
+              About
+            </button>
           </div>
           <div className="product-grid">
             {(products.length > 0 ? products.slice(0, 3) : [1, 2, 3]).map((item, index) => {

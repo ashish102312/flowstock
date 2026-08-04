@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import './Footer.css';
 
 export default function Footer() {
@@ -26,7 +27,21 @@ export default function Footer() {
             <h3 className="label-text">Company</h3>
             <Link to="/">About Us</Link>
             <Link to="/">Careers</Link>
-            <Link to="/">Contact</Link>
+            <a 
+              href="#" 
+              onClick={(e) => {
+                e.preventDefault();
+                toast((t) => (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <p style={{ margin: 0, fontWeight: 'bold' }}>Contact Us:</p>
+                    <a href="tel:+917814607949" style={{ color: 'inherit', textDecoration: 'none', fontWeight: '500' }}>+91 7814607949</a>
+                    <a href="https://www.instagram.com/flowstock.mg?utm_source=qr" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none', fontWeight: '500' }}>Instagram</a>
+                  </div>
+                ), { duration: 6000 });
+              }}
+            >
+              Contact
+            </a>
             <Link to="/">Partners</Link>
           </div>
 
