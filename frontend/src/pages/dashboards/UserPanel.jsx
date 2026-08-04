@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  User, Activity, MonitorSmartphone, Loader2, Clock, ShieldCheck, Package, 
-  CheckCircle2, AlertTriangle, Search, MapPin, ClipboardList, Wrench, 
+import {
+  User, Activity, MonitorSmartphone, Loader2, Clock, ShieldCheck, Package,
+  CheckCircle2, AlertTriangle, Search, MapPin, ClipboardList, Wrench,
   ShieldAlert, Box, Send, Check, RefreshCw, Smartphone, HardDrive
 } from 'lucide-react';
 import { usersApi } from '../../services/api';
@@ -24,7 +24,7 @@ export default function UserPanel({ user, onLogout }) {
   const [sessions, setSessions] = useState([]);
   const [logs, setLogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   // Connect to live global inventory!
   const { inventory } = useInventory();
   const [invSearch, setInvSearch] = useState('');
@@ -32,21 +32,24 @@ export default function UserPanel({ user, onLogout }) {
   // Support ticket form
   const [ticket, setTicket] = useState({ category: 'EQUIPMENT_MAINTENANCE', urgency: 'MEDIUM', notes: '' });
 
+  const [manager, setManager] = useState(null);
+
   useEffect(() => {
     setIsLoading(true);
     Promise.all([
       usersApi.getMySessions().catch(() => ({ data: { data: [] } })),
-      usersApi.getMyAuditLogs(0, 8).catch(() => ({ data: { data: [] } }))
+      usersApi.getMyAuditLogs(0, 8).catch(() => ({ data: { data: [] } })),
+      usersApi.getAllUsers().catch(() => ({ data: { data: [] } }))
     ])
-      .then(([sessionsRes, logsRes]) => {
+      .then(([sessionsRes, logsRes, usersRes]) => {
         const sesData = sessionsRes?.data?.data || [];
         const logsData = logsRes?.data?.data || [];
+        const allUsers = usersRes?.data?.data || [];
 
         // Fallback to mock session if array is empty
         if (sesData.length === 0) {
           setSessions([
-            { id: 'ses-1', os: 'macOS', browser: 'Chrome 124.0', ipAddress: '192.168.1.45', status: 'ACTIVE', lastActiveAt: new Date().toISOString() },
-            { id: 'ses-2', os: 'Android Zebra Scanner', browser: 'FlowStock Mobile App', ipAddress: '10.0.4.18', status: 'ACTIVE', lastActiveAt: new Date(Date.now() - 3600000).toISOString() }
+            { id: 'ses-1', os: 'macOS', browser: 'Chrome 124.0', ipAddress: '192.168.1.45', status: 'ACTIVE', lastActiveAt: new Date().toISOString() }
           ]);
         } else {
           setSessions(sesData);
@@ -61,6 +64,17 @@ export default function UserPanel({ user, onLogout }) {
         } else {
           setLogs(logsData);
         }
+
+        const managers = allUsers.filter(u => u.roles?.some(r => r.includes('MANAGER')));
+        if (managers.length > 0) {
+          // Deterministic assignment based on user ID
+          const uid = user?.id || 'default';
+          let sum = 0;
+          for (let i = 0; i < uid.length; i++) {
+            sum += uid.charCodeAt(i);
+          }
+          setManager(managers[sum % managers.length]);
+        }
       })
       .finally(() => setIsLoading(false));
   }, []);
@@ -68,7 +82,7 @@ export default function UserPanel({ user, onLogout }) {
   // Filter inventory items
   const filteredInventory = useMemo(() => {
     if (!invSearch.trim()) return inventory.slice(0, 8);
-    return inventory.filter(i => 
+    return inventory.filter(i =>
       (i.productName || i.name || '').toLowerCase().includes(invSearch.toLowerCase()) ||
       (i.productId || '').toLowerCase().includes(invSearch.toLowerCase()) ||
       (i.warehouseName || i.warehouseId || '').toLowerCase().includes(invSearch.toLowerCase())
@@ -91,6 +105,18 @@ export default function UserPanel({ user, onLogout }) {
       toast.error("Please explain the issue or required supplies.");
       return;
     }
+    const newTicket = {
+      id: 'TKT-' + Math.floor(Math.random() * 10000),
+      userName: user?.firstName ? `${user.firstName} ${user.lastName}` : 'System User',
+      category: ticket.category,
+      urgency: ticket.urgency,
+      notes: ticket.notes,
+      status: 'OPEN',
+      timestamp: new Date().toLocaleString()
+    };
+    const existing = JSON.parse(localStorage.getItem('supportTickets') || '[]');
+    localStorage.setItem('supportTickets', JSON.stringify([newTicket, ...existing]));
+
     toast.success(`Support ticket logged successfully! Assigned to maintenance supervisor.`);
     setTicket({ category: 'EQUIPMENT_MAINTENANCE', urgency: 'MEDIUM', notes: '' });
   };
@@ -100,7 +126,7 @@ export default function UserPanel({ user, onLogout }) {
   return (
     <div className="welcome-page" style={{ minHeight: '100vh', background: 'var(--color-cream)' }}>
       {/* ── TOP NAVBAR ──────────────────────────────────────────────────────── */}
-      <header className="welcome-header light-mode" style={{ position: 'relative', background: 'white', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
+      <header className="welcome-header light-mode" style={{ position: 'relative', background: 'var(--color-forest)', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
         <Link to="/" className="logo">FLOWSTOCK</Link>
         <nav className="nav-pill">
           <Link to="/">Home</Link>
@@ -111,7 +137,7 @@ export default function UserPanel({ user, onLogout }) {
         </nav>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
           <span className="px-3 py-1 bg-emerald-100 text-[#0A2B1E] rounded-full text-[11px] font-bold tracking-wider uppercase border border-emerald-200">
-            📦 WAREHOUSE SPECIALIST
+            WAREHOUSE SPECIALIST
           </span>
           <button onClick={onLogout} className="cart-btn label-text" style={{ cursor: 'pointer', border: 'none' }}>
             SIGN OUT
@@ -130,9 +156,7 @@ export default function UserPanel({ user, onLogout }) {
       }}>
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
-            <span className="px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-xs font-semibold uppercase tracking-widest inline-block mb-3 border border-white/20">
-              Operational Fulfillment &amp; Stock Verification
-            </span>
+
             <h1 className="anton text-4xl md:text-5xl lg:text-6xl text-[#C2D7B4] tracking-wide">
               OPERATOR WORKSPACE
             </h1>
@@ -142,7 +166,7 @@ export default function UserPanel({ user, onLogout }) {
           </div>
           <div className="bg-black/30 p-4 rounded-2xl border border-white/15 backdrop-blur-md text-right shrink-0">
             <div className="text-[11px] text-gray-300 uppercase tracking-wider font-bold">Shift Supervisor</div>
-            <div className="text-xl font-['Anton'] text-emerald-300 my-0.5">VIKRAM MALHOTRA (EXT: 402)</div>
+            <div className="text-xl font-['Anton'] text-emerald-300 my-0.5">{manager ? `${manager.firstName} ${manager.lastName}`.toUpperCase() : 'VIKRAM MALHOTRA'} (EXT: 402)</div>
             <div className="text-xs text-emerald-200/70 font-mono">Terminal Station #14 • Connected</div>
           </div>
         </div>
@@ -194,33 +218,29 @@ export default function UserPanel({ user, onLogout }) {
         <div className="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl border border-stone-200 shadow-sm">
           <button
             onClick={() => setActiveTab('picklists')}
-            className={`flex-1 py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${
-              activeTab === 'picklists' ? 'bg-[#0A2B1E] text-white shadow-md' : 'text-gray-600 hover:bg-stone-50'
-            }`}
+            className={`flex-1 py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${activeTab === 'picklists' ? 'bg-[#0A2B1E] text-white shadow-md' : 'text-gray-600 hover:bg-stone-50'
+              }`}
           >
             <ClipboardList className="w-4 h-4 text-emerald-400" /> My Daily Picklists ({picklists.length - completedCount} Pending)
           </button>
           <button
             onClick={() => setActiveTab('inventory')}
-            className={`flex-1 py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${
-              activeTab === 'inventory' ? 'bg-[#0A2B1E] text-white shadow-md' : 'text-gray-600 hover:bg-stone-50'
-            }`}
+            className={`flex-1 py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${activeTab === 'inventory' ? 'bg-[#0A2B1E] text-white shadow-md' : 'text-gray-600 hover:bg-stone-50'
+              }`}
           >
             <Search className="w-4 h-4 text-emerald-400" /> Live Stock Inquiry
           </button>
           <button
             onClick={() => setActiveTab('security')}
-            className={`flex-1 py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${
-              activeTab === 'security' ? 'bg-[#0A2B1E] text-white shadow-md' : 'text-gray-600 hover:bg-stone-50'
-            }`}
+            className={`flex-1 py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${activeTab === 'security' ? 'bg-[#0A2B1E] text-white shadow-md' : 'text-gray-600 hover:bg-stone-50'
+              }`}
           >
             <MonitorSmartphone className="w-4 h-4 text-emerald-400" /> Active Devices &amp; Logs
           </button>
           <button
             onClick={() => setActiveTab('support')}
-            className={`flex-1 py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${
-              activeTab === 'support' ? 'bg-[#0A2B1E] text-white shadow-md' : 'text-gray-600 hover:bg-stone-50'
-            }`}
+            className={`flex-1 py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${activeTab === 'support' ? 'bg-[#0A2B1E] text-white shadow-md' : 'text-gray-600 hover:bg-stone-50'
+              }`}
           >
             <Wrench className="w-4 h-4 text-emerald-400" /> Report Issue &amp; PPE
           </button>
@@ -241,15 +261,13 @@ export default function UserPanel({ user, onLogout }) {
 
             <div className="space-y-3">
               {picklists.map(item => (
-                <div key={item.id} className={`p-4 rounded-2xl border transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${
-                  item.status === 'COMPLETED' ? 'bg-emerald-50/50 border-emerald-300 opacity-80' : 'bg-white border-stone-200 hover:shadow-md'
-                }`}>
+                <div key={item.id} className={`p-4 rounded-2xl border transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${item.status === 'COMPLETED' ? 'bg-emerald-50/50 border-emerald-300 opacity-80' : 'bg-white border-stone-200 hover:shadow-md'
+                  }`}>
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() => handleToggleTask(item.id)}
-                      className={`w-7 h-7 rounded-lg flex items-center justify-center border-2 transition ${
-                        item.status === 'COMPLETED' ? 'bg-emerald-600 border-emerald-600 text-white' : 'border-gray-300 hover:border-emerald-600'
-                      }`}
+                      className={`w-7 h-7 rounded-lg flex items-center justify-center border-2 transition ${item.status === 'COMPLETED' ? 'bg-emerald-600 border-emerald-600 text-white' : 'border-gray-300 hover:border-emerald-600'
+                        }`}
                     >
                       {item.status === 'COMPLETED' && <Check className="w-4 h-4 stroke-[3]" />}
                     </button>
@@ -265,9 +283,8 @@ export default function UserPanel({ user, onLogout }) {
                   </div>
 
                   <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
-                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase ${
-                      item.priority === 'URGENT' ? 'bg-rose-100 text-rose-800 border border-rose-200' : 'bg-amber-50 text-amber-800'
-                    }`}>
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase ${item.priority === 'URGENT' ? 'bg-rose-100 text-rose-800 border border-rose-200' : 'bg-amber-50 text-amber-800'
+                      }`}>
                       {item.priority} PRIORITY
                     </span>
                     <button
@@ -324,7 +341,7 @@ export default function UserPanel({ user, onLogout }) {
                         {available} <span className="text-xs font-sans font-normal text-gray-500">in stock</span>
                       </div>
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${isLow ? 'bg-rose-100 text-rose-800' : 'bg-emerald-100 text-emerald-800'}`}>
-                        {isLow ? '⚠️ LOW STOCK' : '🟢 ADEQUATE'}
+                        {isLow ? ' LOW STOCK' : 'ADEQUATE'}
                       </span>
                     </div>
                   </div>
@@ -344,8 +361,8 @@ export default function UserPanel({ user, onLogout }) {
                   <MonitorSmartphone className="w-5 h-5 text-emerald-700" />
                   <h3 className="anton text-lg text-[#0A2B1E]">CONNECTED TERMINALS</h3>
                 </div>
-                <button 
-                  onClick={() => toast.success("Unrecognized terminal sessions revoked!")} 
+                <button
+                  onClick={() => toast.success("Unrecognized terminal sessions revoked!")}
                   className="px-3 py-1 bg-stone-100 hover:bg-stone-200 text-stone-700 text-[10px] font-bold uppercase rounded-lg transition"
                 >
                   Revoke Others
@@ -423,11 +440,10 @@ export default function UserPanel({ user, onLogout }) {
                       key={p}
                       type="button"
                       onClick={() => setTicket({ ...ticket, urgency: p })}
-                      className={`py-2.5 rounded-xl font-bold text-xs border transition ${
-                        ticket.urgency === p 
+                      className={`py-2.5 rounded-xl font-bold text-xs border transition ${ticket.urgency === p
                           ? p === 'URGENT' ? 'bg-rose-600 border-rose-600 text-white' : 'bg-[#0A2B1E] border-[#0A2B1E] text-white'
                           : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'
-                      }`}
+                        }`}
                     >
                       {p}
                     </button>

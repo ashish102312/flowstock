@@ -563,9 +563,7 @@ export default function SupplierPage() {
         boxShadow: '0 25px 50px rgba(1,71,46,0.25)',
       }}>
         <div className="max-w-6xl mx-auto">
-          <span className="px-4 py-1 rounded-full bg-white/10 text-emerald-300 text-xs font-semibold uppercase tracking-widest inline-block mb-3 border border-white/20">
-            Enterprise SCM Vendor Central
-          </span>
+
           <h1 className="anton text-5xl md:text-6xl lg:text-7xl mb-4 text-[#C2D7B4]">
             SUPPLIER NETWORK
           </h1>

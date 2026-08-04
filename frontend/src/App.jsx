@@ -26,7 +26,7 @@ import { InventoryProvider } from './context/InventoryContext';
 
 function ProtectedRoute({ children }) {
   const { user, setUserFromToken } = useAuth();
-  const token = sessionStorage.getItem('access_token');
+  const token = localStorage.getItem('access_token');
   const [isResolving, setIsResolving] = React.useState(!!token && !user);
 
   useEffect(() => {
@@ -37,8 +37,8 @@ function ProtectedRoute({ children }) {
           setUserFromToken(token, data.data);
         })
         .catch(() => {
-          sessionStorage.removeItem('access_token');
-          sessionStorage.removeItem('user_id');
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('user_id');
         })
         .finally(() => setIsResolving(false));
     } else {
@@ -69,7 +69,7 @@ function OAuth2Callback() {
   useEffect(() => {
     const token = searchParams.get('token');
     if (token) {
-      sessionStorage.setItem('access_token', token);
+      localStorage.setItem('access_token', token);
       authApi.getProfile()
         .then(({ data }) => {
           setUserFromToken(token, data.data);
@@ -86,7 +86,7 @@ function OAuth2Callback() {
   }, [searchParams, navigate, setUserFromToken]);
 
   return (
-    <div className="welcome-page" style={{ minHeight: '100vh', background: 'var(--color-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div className="welcome-page" style={{ minHeight: '100vh', background: 'var(--color-cream)', display: 'flex', alignItems: 'center', justify-content: 'center' }}>
       <div style={{ textAlign: 'center' }}>
         <div style={{ width: '40px', height: '40px', border: '4px solid var(--color-olive)', borderTopColor: 'var(--color-forest)', borderRadius: '50%', margin: '0 auto', animation: 'spin 1s linear infinite' }}></div>
         <p className="label-text" style={{ marginTop: '1rem', color: 'var(--color-forest)' }}>COMPLETING SIGN IN...</p>

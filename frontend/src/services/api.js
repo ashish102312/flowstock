@@ -84,13 +84,14 @@ export const authApi = {
   verifyEmail: (token) =>
     api.get(`/auth/verify-email?token=${token}`),
 
-  getProfile: () => api.get('/users/me'),
+  getProfile: () => api.get('/auth/me'),
 };
 
 // ── Users API calls ────────────────────────────────────────────────────────────
 export const usersApi = {
-  getAllUsers: () => api.get('/users'),
+  getAllUsers: () => api.get('/auth/users'),
   getMySessions: () => api.get('/users/sessions'),
+  getUserProfile: (userId) => api.get(`/users/${userId}/profile`),
   getMyAuditLogs: (page = 0, size = 10) => api.get(`/users/audit-logs?page=${page}&size=${size}`),
 };
 

@@ -6,69 +6,67 @@ spring:
     name: gateway-service
   cloud:
     gateway:
-      server:
-        webflux:
-          discovery:
-            locator:
-              enabled: true
-              lower-case-service-id: true
-          routes:
-            - id: auth-service
-              uri: lb://AUTH-SERVICE
-              predicates:
-                - Path=/api/auth/**
-            - id: auth-service-v1
-              uri: lb://AUTH-SERVICE
-              predicates:
-                - Path=/api/v1/auth/**
-              filters:
-                - RewritePath=/api/v1/auth(?<remaining>.*), /api/auth${remaining}
-            - id: user-service
-              uri: lb://USER-SERVICE
-              predicates:
-                - Path=/api/users/**
-            - id: user-service-v1
-              uri: lb://USER-SERVICE
-              predicates:
-                - Path=/api/v1/users/**
-              filters:
-                - RewritePath=/api/v1/users(?<remaining>.*), /api/users${remaining}
-            - id: product-service
-              uri: lb://PRODUCT-SERVICE
-              predicates:
-                - Path=/api/products/**
-            - id: product-service-v1
-              uri: lb://PRODUCT-SERVICE
-              predicates:
-                - Path=/api/v1/products/**
-              filters:
-                - RewritePath=/api/v1/products(?<remaining>.*), /api/products${remaining}
-            - id: inventory-service
-              uri: lb://INVENTORY-SERVICE
-              predicates:
-                - Path=/api/inventory/**
-            - id: inventory-service-v1
-              uri: lb://INVENTORY-SERVICE
-              predicates:
-                - Path=/api/v1/inventory/**
-              filters:
-                - RewritePath=/api/v1/inventory(?<remaining>.*), /api/inventory${remaining}
-            - id: order-service
-              uri: lb://ORDER-SERVICE
-              predicates:
-                - Path=/api/orders/**
-            - id: order-service-v1
-              uri: lb://ORDER-SERVICE
-              predicates:
-                - Path=/api/v1/orders/**
-              filters:
-                - RewritePath=/api/v1/orders(?<remaining>.*), /api/orders${remaining}
-            - id: warehouse-service-v1
-              uri: lb://INVENTORY-SERVICE
-              predicates:
-                - Path=/api/v1/warehouses/**
-              filters:
-                - RewritePath=/api/v1/warehouses(?<remaining>.*), /api/inventory/warehouses${remaining}
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: auth-service
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/api/auth/**
+        - id: auth-service-v1
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/api/v1/auth/**
+          filters:
+            - RewritePath=/api/v1/auth(?<remaining>.*), /api/auth${remaining}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/users/**
+        - id: user-service-v1
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/v1/users/**
+          filters:
+            - RewritePath=/api/v1/users(?<remaining>.*), /api/users${remaining}
+        - id: product-service
+          uri: lb://PRODUCT-SERVICE
+          predicates:
+            - Path=/api/products/**
+        - id: product-service-v1
+          uri: lb://PRODUCT-SERVICE
+          predicates:
+            - Path=/api/v1/products/**
+          filters:
+            - RewritePath=/api/v1/products(?<remaining>.*), /api/products${remaining}
+        - id: inventory-service
+          uri: lb://INVENTORY-SERVICE
+          predicates:
+            - Path=/api/inventory/**
+        - id: inventory-service-v1
+          uri: lb://INVENTORY-SERVICE
+          predicates:
+            - Path=/api/v1/inventory/**
+          filters:
+            - RewritePath=/api/v1/inventory(?<remaining>.*), /api/inventory${remaining}
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/api/orders/**
+        - id: order-service-v1
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/api/v1/orders/**
+          filters:
+            - RewritePath=/api/v1/orders(?<remaining>.*), /api/orders${remaining}
+        - id: warehouse-service-v1
+          uri: lb://INVENTORY-SERVICE
+          predicates:
+            - Path=/api/v1/warehouses/**
+          filters:
+            - RewritePath=/api/v1/warehouses(?<remaining>.*), /api/inventory/warehouses${remaining}
 
 eureka:
   client:

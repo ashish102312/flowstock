@@ -15,6 +15,11 @@ public class UserProfileController {
         this.service = service;
     }
 
+    @GetMapping
+    public ResponseEntity<java.util.List<UserProfile>> getAllProfiles() {
+        return ResponseEntity.ok(service.getAllProfiles());
+    }
+
     @GetMapping("/{userId}/profile")
     public ResponseEntity<UserProfile> getProfile(@PathVariable String userId) {
         return ResponseEntity.ok(service.getProfile(userId));

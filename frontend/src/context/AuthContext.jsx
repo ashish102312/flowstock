@@ -22,9 +22,9 @@ export function AuthProvider({ children }) {
         userData = { id: data.userId, email: data.email, roles: data.roles };
       }
       if (accessToken) {
-        sessionStorage.setItem('access_token', accessToken);
+        localStorage.setItem('access_token', accessToken);
       }
-      if (userData?.id) sessionStorage.setItem('user_id', userData.id);
+      if (userData?.id) localStorage.setItem('user_id', userData.id);
       setUser(userData);
     } finally {
       setIsLoading(false);
@@ -38,16 +38,16 @@ export function AuthProvider({ children }) {
     } catch {
       // ignore errors — still clear local state
     } finally {
-      sessionStorage.removeItem('access_token');
-      sessionStorage.removeItem('user_id');
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('user_id');
       setUser(null);
       setIsLoading(false);
     }
   }, []);
 
   const setUserFromToken = useCallback((token, userData) => {
-    sessionStorage.setItem('access_token', token);
-    if (userData?.id) sessionStorage.setItem('user_id', userData.id);
+    localStorage.setItem('access_token', token);
+    if (userData?.id) localStorage.setItem('user_id', userData.id);
     setUser(userData);
   }, []);
 

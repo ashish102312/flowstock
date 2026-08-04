@@ -56,5 +56,15 @@ public class DataInitializer implements CommandLineRunner {
             roleRepository.findByName("MANAGER").ifPresent(role -> managerUser.setRoles(Set.of(role)));
             userRepository.save(managerUser);
         }
+        // Seed default admin user
+        if (userRepository.findByEmail("admin123@flowstock.com").isEmpty()) {
+            User adminUser = new User();
+            adminUser.setFirstName("Super");
+            adminUser.setLastName("Admin");
+            adminUser.setEmail("admin123@flowstock.com");
+            adminUser.setPassword(passwordEncoder.encode("admin123"));
+            roleRepository.findByName("ADMIN").ifPresent(role -> adminUser.setRoles(Set.of(role)));
+            userRepository.save(adminUser);
+        }
     }
 }

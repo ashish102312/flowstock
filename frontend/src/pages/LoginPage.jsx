@@ -28,8 +28,14 @@ export default function LoginPage() {
       toast.success('Welcome back!');
       navigate('/dashboard');
     } catch (err) {
-      const msg = err?.response?.data?.message || 'Login failed. Please try again.';
-      toast.error(msg);
+      const status = err?.response?.status;
+      const msg = err?.response?.data?.message || '';
+      
+      if (status === 401 || status === 403 || status === 404 || msg.toLowerCase().includes('bad credentials') || msg.toLowerCase().includes('invalid')) {
+        toast.error('Account not found or invalid credentials! Please create an account.');
+      } else {
+        toast.error(msg || 'Login failed. Please try again.');
+      }
     }
   };
 

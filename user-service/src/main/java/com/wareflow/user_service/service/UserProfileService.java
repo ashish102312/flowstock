@@ -29,4 +29,8 @@ public class UserProfileService {
         profile.setDepartment(updatedProfile.getDepartment());
         return repository.save(profile);
     }
+
+    public java.util.List<UserProfile> getAllProfiles() {
+        return repository.findAll();
+    }
 }

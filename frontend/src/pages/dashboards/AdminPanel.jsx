@@ -44,6 +44,19 @@ export default function AdminPanel({ user, onLogout }) {
   const [roleFilter, setRoleFilter] = useState('ALL');
   const [microservices, setMicroservices] = useState(MICROSERVICES_LIST);
   const [auditLogs, setAuditLogs] = useState(INITIAL_AUDIT_LOGS);
+  const [supportTickets, setSupportTickets] = useState([]);
+
+  useEffect(() => {
+    const existing = JSON.parse(localStorage.getItem('supportTickets') || '[]');
+    setSupportTickets(existing);
+  }, [activeTab]);
+
+  const handleTicketStatusChange = (id, newStatus) => {
+    const updated = supportTickets.map(t => t.id === id ? { ...t, status: newStatus } : t);
+    setSupportTickets(updated);
+    localStorage.setItem('supportTickets', JSON.stringify(updated));
+    toast.success(`Ticket ${id} marked as ${newStatus}`);
+  };
 
   // System config state
   const [config, setConfig] = useState({
@@ -57,20 +70,17 @@ export default function AdminPanel({ user, onLogout }) {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [newUser, setNewUser] = useState({ firstName: '', lastName: '', email: '', role: 'ROLE_USER', status: 'ACTIVE' });
 
-  // Fetch real users and blend with mock staff for rich UX
+  // Fetch real users from backend
   useEffect(() => {
     setIsLoading(true);
     usersApi.getAllUsers()
       .then((res) => {
         const backendUsers = res?.data?.data || [];
-        // Blend unique emails
-        const existingEmails = new Set(backendUsers.map(u => u.email));
-        const addedMocks = MOCK_ADMIN_STAFF.filter(m => !existingEmails.has(m.email));
-        setUsers([...backendUsers, ...addedMocks]);
+        setUsers(backendUsers);
       })
       .catch((err) => {
-        console.warn('Backend users load fallback to local enterprise roster', err);
-        setUsers(MOCK_ADMIN_STAFF);
+        console.error('Failed to load users', err);
+        setUsers([]);
       })
       .finally(() => setIsLoading(false));
   }, []);
@@ -151,7 +161,7 @@ export default function AdminPanel({ user, onLogout }) {
   return (
     <div className="welcome-page" style={{ minHeight: '100vh', background: 'var(--color-cream)' }}>
       {/* ── TOP NAVBAR ──────────────────────────────────────────────────────── */}
-      <header className="welcome-header light-mode" style={{ position: 'relative', background: 'white', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
+      <header className="welcome-header light-mode" style={{ position: 'relative', background: 'var(--color-forest)', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
         <Link to="/" className="logo">FLOWSTOCK</Link>
         <nav className="nav-pill">
           <Link to="/">Home</Link>
@@ -162,7 +172,7 @@ export default function AdminPanel({ user, onLogout }) {
         </nav>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
           <span className="px-3 py-1 bg-rose-100 text-rose-800 rounded-full text-[11px] font-bold tracking-wider uppercase border border-rose-200">
-            🛡️ SUPER ADMIN
+            SUPER ADMIN
           </span>
           <button onClick={onLogout} className="cart-btn label-text" style={{ cursor: 'pointer', border: 'none' }}>
             SIGN OUT
@@ -181,9 +191,6 @@ export default function AdminPanel({ user, onLogout }) {
       }}>
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
-            <span className="px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-xs font-semibold uppercase tracking-widest inline-block mb-3 border border-white/20">
-              System Governance &amp; RBAC Control
-            </span>
             <h1 className="anton text-4xl md:text-5xl lg:text-6xl text-[#C2D7B4] tracking-wide">
               ADMINISTRATOR CONSOLE
             </h1>
@@ -290,6 +297,13 @@ export default function AdminPanel({ user, onLogout }) {
               }`}
           >
             <Sliders className="w-4 h-4 text-emerald-400" /> System Configuration
+          </button>
+          <button
+            onClick={() => setActiveTab('tickets')}
+            className={`flex-1 py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${activeTab === 'tickets' ? 'bg-[#0A2B1E] text-white shadow-md' : 'text-gray-600 hover:bg-stone-50'
+              }`}
+          >
+            <AlertTriangle className="w-4 h-4 text-emerald-400" /> Support Tickets
           </button>
         </div>
 
@@ -595,6 +609,64 @@ export default function AdminPanel({ user, onLogout }) {
                 Save &amp; Commit Changes
               </button>
             </div>
+          </div>
+        )}
+
+        {/* ── TAB 5: SUPPORT TICKETS ────────────────────────────────────── */}
+        {activeTab === 'tickets' && (
+          <div className="bg-white rounded-3xl p-6 md:p-8 border border-stone-200 shadow-md animate-fade-in">
+            <div className="border-b border-stone-200 pb-4 mb-6">
+              <h2 className="anton text-2xl text-[#0A2B1E]">SUPPORT TICKETS</h2>
+              <p className="text-xs text-gray-500">Review and manage support tickets raised by system users.</p>
+            </div>
+            
+            {supportTickets.length === 0 ? (
+              <div className="text-center py-12 text-gray-500 text-sm">No support tickets found.</div>
+            ) : (
+              <div className="overflow-x-auto border border-stone-200 rounded-2xl">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-stone-100 text-stone-700 uppercase font-bold border-b border-stone-200">
+                    <tr>
+                      <th className="p-4">Ticket ID</th>
+                      <th className="p-4">Raised By</th>
+                      <th className="p-4">Category / Urgency</th>
+                      <th className="p-4">Notes</th>
+                      <th className="p-4">Status</th>
+                      <th className="p-4 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-stone-100">
+                    {supportTickets.map(ticket => (
+                      <tr key={ticket.id} className="hover:bg-stone-50 transition">
+                        <td className="p-4 font-bold text-[#0A2B1E]">{ticket.id}</td>
+                        <td className="p-4 font-medium text-stone-700">{ticket.userName}</td>
+                        <td className="p-4">
+                          <span className="block text-stone-800 font-bold mb-1">{ticket.category}</span>
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${ticket.urgency === 'HIGH' ? 'bg-rose-100 text-rose-800' : ticket.urgency === 'MEDIUM' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}`}>{ticket.urgency}</span>
+                        </td>
+                        <td className="p-4 text-stone-600 max-w-xs truncate" title={ticket.notes}>{ticket.notes}</td>
+                        <td className="p-4">
+                          <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${ticket.status === 'OPEN' ? 'bg-rose-100 text-rose-800 border border-rose-300' : 'bg-emerald-100 text-emerald-800 border border-emerald-300'}`}>
+                            {ticket.status}
+                          </span>
+                        </td>
+                        <td className="p-4 text-right">
+                          {ticket.status === 'OPEN' ? (
+                            <button onClick={() => handleTicketStatusChange(ticket.id, 'RESOLVED')} className="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 rounded-lg text-[11px] font-bold uppercase transition">
+                              Mark Resolved
+                            </button>
+                          ) : (
+                            <button onClick={() => handleTicketStatusChange(ticket.id, 'OPEN')} className="px-3 py-1.5 bg-stone-100 hover:bg-stone-200 border border-stone-300 text-stone-700 rounded-lg text-[11px] font-bold uppercase transition">
+                              Reopen
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
 

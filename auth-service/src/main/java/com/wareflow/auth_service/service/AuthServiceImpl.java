@@ -92,4 +92,24 @@ public class AuthServiceImpl implements AuthService {
                 user.getRoles().stream().map(Role::getName).collect(Collectors.toSet())
         );
     }
+
+    @Override
+    public java.util.List<java.util.Map<String, Object>> getAllUsers() {
+        return userRepository.findAll().stream().map(user -> {
+            java.util.List<String> roles = user.getRoles().stream()
+                    .map(Role::getName)
+                    .map(r -> "ROLE_" + r)
+                    .collect(Collectors.toList());
+            return java.util.Map.<String, Object>of(
+                    "id", user.getId(),
+                    "firstName", user.getFirstName() != null ? user.getFirstName() : "",
+                    "lastName", user.getLastName() != null ? user.getLastName() : "",
+                    "email", user.getEmail(),
+                    "roles", roles,
+                    "emailVerified", true,
+                    "createdAt", user.getCreatedAt() != null ? user.getCreatedAt().toString() : "",
+                    "status", "ACTIVE"
+            );
+        }).collect(Collectors.toList());
+    }
 }

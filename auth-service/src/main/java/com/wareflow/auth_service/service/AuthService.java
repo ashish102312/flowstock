@@ -7,4 +7,5 @@ import com.wareflow.auth_service.dto.RegisterRequest;
 public interface AuthService {
     AuthResponse register(RegisterRequest request);
     AuthResponse login(AuthRequest request);
+    java.util.List<java.util.Map<String, Object>> getAllUsers();
 }
