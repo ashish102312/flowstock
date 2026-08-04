@@ -86,7 +86,7 @@ function OAuth2Callback() {
   }, [searchParams, navigate, setUserFromToken]);
 
   return (
-    <div className="welcome-page" style={{ minHeight: '100vh', background: 'var(--color-cream)', display: 'flex', alignItems: 'center', justify-content: 'center' }}>
+    <div className="welcome-page" style={{ minHeight: '100vh', background: 'var(--color-cream)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ textAlign: 'center' }}>
         <div style={{ width: '40px', height: '40px', border: '4px solid var(--color-olive)', borderTopColor: 'var(--color-forest)', borderRadius: '50%', margin: '0 auto', animation: 'spin 1s linear infinite' }}></div>
         <p className="label-text" style={{ marginTop: '1rem', color: 'var(--color-forest)' }}>COMPLETING SIGN IN...</p>
